@@ -4,4 +4,5 @@
 
 Initial password for user admin: admin
 
-Database i used was a MariaDB
+Developed was this project with a MariaDB.
+Create the Database, tables (look at the sourcefile) and a specific user for this database.

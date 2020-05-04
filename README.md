@@ -5,4 +5,7 @@
 Initial password for user admin: admin
 
 Developed was this project with a MariaDB.
+
 Create the Database, tables (look at the sourcefile) and a specific user for this database.
+
+I used the mysql database connector from oracle to connect the database

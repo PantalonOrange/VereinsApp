@@ -50,7 +50,7 @@ Partial Class frmExpeditions
         Me.btnRefresh.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Size = New System.Drawing.Size(80, 28)
-        Me.btnRefresh.TabIndex = 5
+        Me.btnRefresh.TabIndex = 6
         Me.btnRefresh.Text = "Button1"
         Me.btnRefresh.UseVisualStyleBackColor = True
         '
@@ -62,6 +62,7 @@ Partial Class frmExpeditions
         Me.dtaGridExpeditions.AllowUserToResizeRows = False
         Me.dtaGridExpeditions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.dtaGridExpeditions.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.dtaGridExpeditions.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dtaGridExpeditions.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         Me.dtaGridExpeditions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dtaGridExpeditions.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
@@ -75,7 +76,7 @@ Partial Class frmExpeditions
         Me.dtaGridExpeditions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtaGridExpeditions.ShowEditingIcon = False
         Me.dtaGridExpeditions.Size = New System.Drawing.Size(1035, 516)
-        Me.dtaGridExpeditions.TabIndex = 8
+        Me.dtaGridExpeditions.TabIndex = 2
         '
         'btnChangeExpedition
         '
@@ -83,7 +84,7 @@ Partial Class frmExpeditions
         Me.btnChangeExpedition.Margin = New System.Windows.Forms.Padding(2)
         Me.btnChangeExpedition.Name = "btnChangeExpedition"
         Me.btnChangeExpedition.Size = New System.Drawing.Size(169, 28)
-        Me.btnChangeExpedition.TabIndex = 3
+        Me.btnChangeExpedition.TabIndex = 4
         Me.btnChangeExpedition.Text = "Button1"
         Me.btnChangeExpedition.UseVisualStyleBackColor = True
         '
@@ -94,7 +95,7 @@ Partial Class frmExpeditions
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(169, 28)
-        Me.btnClose.TabIndex = 6
+        Me.btnClose.TabIndex = 7
         Me.btnClose.Text = "Button1"
         Me.btnClose.UseVisualStyleBackColor = True
         '
@@ -104,7 +105,7 @@ Partial Class frmExpeditions
         Me.btnNewExpedition.Margin = New System.Windows.Forms.Padding(2)
         Me.btnNewExpedition.Name = "btnNewExpedition"
         Me.btnNewExpedition.Size = New System.Drawing.Size(169, 29)
-        Me.btnNewExpedition.TabIndex = 2
+        Me.btnNewExpedition.TabIndex = 3
         Me.btnNewExpedition.Text = "Button1"
         Me.btnNewExpedition.UseVisualStyleBackColor = True
         '
@@ -129,7 +130,7 @@ Partial Class frmExpeditions
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Size = New System.Drawing.Size(80, 28)
-        Me.btnDelete.TabIndex = 4
+        Me.btnDelete.TabIndex = 5
         Me.btnDelete.Text = "Button1"
         Me.btnDelete.UseVisualStyleBackColor = True
         '
@@ -140,7 +141,7 @@ Partial Class frmExpeditions
         Me.cmbBoxYear.MaxLength = 4
         Me.cmbBoxYear.Name = "cmbBoxYear"
         Me.cmbBoxYear.Size = New System.Drawing.Size(67, 21)
-        Me.cmbBoxYear.TabIndex = 7
+        Me.cmbBoxYear.TabIndex = 8
         '
         'txtBoxSearch
         '

@@ -93,8 +93,6 @@ Public Class frmMain
     End Sub
 
     Private Sub signOff()
-        frmLogin.txtBoxUserName.Text = ""
-        frmLogin.txtBoxPassword.Text = ""
         frmLogin.txtBoxUserName.Select()
         frmLogin.Show()
     End Sub

@@ -52,7 +52,7 @@ Partial Class frmCash
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Size = New System.Drawing.Size(80, 28)
-        Me.btnDelete.TabIndex = 4
+        Me.btnDelete.TabIndex = 5
         Me.btnDelete.Text = "Button1"
         Me.btnDelete.UseVisualStyleBackColor = True
         '
@@ -72,7 +72,7 @@ Partial Class frmCash
         Me.btnRefresh.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Size = New System.Drawing.Size(80, 28)
-        Me.btnRefresh.TabIndex = 5
+        Me.btnRefresh.TabIndex = 6
         Me.btnRefresh.Text = "Button1"
         Me.btnRefresh.UseVisualStyleBackColor = True
         '
@@ -84,6 +84,7 @@ Partial Class frmCash
         Me.dtaGridCashFlow.AllowUserToResizeRows = False
         Me.dtaGridCashFlow.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.dtaGridCashFlow.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.dtaGridCashFlow.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dtaGridCashFlow.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         Me.dtaGridCashFlow.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dtaGridCashFlow.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
@@ -97,7 +98,7 @@ Partial Class frmCash
         Me.dtaGridCashFlow.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtaGridCashFlow.ShowEditingIcon = False
         Me.dtaGridCashFlow.Size = New System.Drawing.Size(1035, 516)
-        Me.dtaGridCashFlow.TabIndex = 8
+        Me.dtaGridCashFlow.TabIndex = 2
         '
         'btnChangeFlow
         '
@@ -105,7 +106,7 @@ Partial Class frmCash
         Me.btnChangeFlow.Margin = New System.Windows.Forms.Padding(2)
         Me.btnChangeFlow.Name = "btnChangeFlow"
         Me.btnChangeFlow.Size = New System.Drawing.Size(169, 28)
-        Me.btnChangeFlow.TabIndex = 3
+        Me.btnChangeFlow.TabIndex = 4
         Me.btnChangeFlow.Text = "Button1"
         Me.btnChangeFlow.UseVisualStyleBackColor = True
         '
@@ -116,7 +117,7 @@ Partial Class frmCash
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(169, 28)
-        Me.btnClose.TabIndex = 6
+        Me.btnClose.TabIndex = 7
         Me.btnClose.Text = "Button1"
         Me.btnClose.UseVisualStyleBackColor = True
         '
@@ -126,7 +127,7 @@ Partial Class frmCash
         Me.btnNewFlow.Margin = New System.Windows.Forms.Padding(2)
         Me.btnNewFlow.Name = "btnNewFlow"
         Me.btnNewFlow.Size = New System.Drawing.Size(169, 29)
-        Me.btnNewFlow.TabIndex = 2
+        Me.btnNewFlow.TabIndex = 3
         Me.btnNewFlow.Text = "Button1"
         Me.btnNewFlow.UseVisualStyleBackColor = True
         '
@@ -160,7 +161,7 @@ Partial Class frmCash
         Me.cmbBoxYear.MaxLength = 4
         Me.cmbBoxYear.Name = "cmbBoxYear"
         Me.cmbBoxYear.Size = New System.Drawing.Size(67, 21)
-        Me.cmbBoxYear.TabIndex = 7
+        Me.cmbBoxYear.TabIndex = 8
         '
         'txtBoxSearch
         '
@@ -183,7 +184,7 @@ Partial Class frmCash
         '
         Me.cntMouseMenue.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntMenueNew, Me.cntMenueChange, Me.cntMenueDelete, Me.cntMenueRefresh})
         Me.cntMouseMenue.Name = "ContextMenuStrip1"
-        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 92)
+        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 114)
         '
         'cntMenueNew
         '

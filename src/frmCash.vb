@@ -1,18 +1,20 @@
 ﻿'frmCash
-'Handles all cash flows (money, money, money)
+'Handles all the cash flows (money, money, money)
 'Copyright (C)2019,2020 by Christian Brunner
 
-Imports System
-Imports System.Text
 Imports MySql.Data.MySqlClient
 
 Public Class frmCash
 
     Private returnConnection As New service_GetDataBaseInfos
     Private ConnectionString As String = returnConnection._returnConnectionString()
+    Private SelectedRowSave As Integer = 0
+    Private HScrollSave As Integer = 0
 
     Private Sub frmCash_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.KeyPreview = vbTrue
+        'Load fomular and fill in text-constants like buttons and labels
+        ' Fills the comboboxe (year) wit values from the database and read/display the current cash flows
+        Me.KeyPreview = True
         Me.Text = "Kassa-Buchungen verwalten"
         lblSearch.Text = "Suche"
         lblYear.Text = "Jahr"
@@ -24,10 +26,12 @@ Public Class frmCash
         btnDelete.Text = "&Lö"
         btnRefresh.Text = "&Akt (F5)"
         btnClose.Text = "&Schließen (F3)"
-        refreshCashFlow(txtBoxSearch.Text)
+        fillInCmbBoxYear()
+        readCashFlow(txtBoxSearch.Text)
     End Sub
 
     Private Sub frmCash_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        'Handle key prints F3, F4, F5, F6 and F7 manually
         Select Case e.KeyCode
             Case Keys.F3
                 Me.Close()
@@ -37,13 +41,38 @@ Public Class frmCash
                 refreshCashFlow(txtBoxSearch.Text)
             Case Keys.F6
                 createNewCashFlow()
+            Case Keys.F7
+                cmbBoxYear.Select()
         End Select
     End Sub
 
     Private Sub dtaGridCashFlow_MouseClick(sender As Object, e As MouseEventArgs) Handles dtaGridCashFlow.MouseClick
+        'Shows the drop down menue on the datagridview via mouseclick
         If e.Button = Windows.Forms.MouseButtons.Right Then
             cntMouseMenue.Show(Me, e.Location)
         End If
+    End Sub
+
+    Private Sub dtaGridCashFlow_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dtaGridCashFlow.CellFormatting
+        If e.RowIndex Mod 2 = 0 Then
+            'Every second row
+            e.CellStyle.ForeColor = Color.Black
+            e.CellStyle.BackColor = Color.LightGray
+        Else
+            e.CellStyle.ForeColor = Color.DarkRed
+            e.CellStyle.BackColor = Color.White
+        End If
+
+        Select Case e.ColumnIndex
+            Case 3 'Flowdate
+                e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            Case 4 'Incomming
+                e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+            Case 5 'Outgoing
+                e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+            Case 6 'Rowdate
+                e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+        End Select
     End Sub
 
     Private Sub btnNewFlow_Click(sender As Object, e As EventArgs) Handles btnNewFlow.Click, cntMenueNew.Click
@@ -55,16 +84,8 @@ Public Class frmCash
     End Sub
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click, cntMenueDelete.Click
-        Dim Result As DialogResult
-        timeReadCashFlow.Stop()
-        For Each SelectedRow As DataGridViewRow In dtaGridCashFlow.SelectedRows
-            Result = MessageBox.Show("Bitte das Löschen der Buchung bestätigen", "Buchung wirklich löschen?", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If Result = System.Windows.Forms.DialogResult.Yes Then
-                deleteCashFlow(Convert.ToInt64(dtaGridCashFlow.Rows(SelectedRow.Index).Cells(0).Value))
-            End If
-        Next
+        deleteCashFlow()
         refreshCashFlow(txtBoxSearch.Text)
-        timeReadCashFlow.Start()
     End Sub
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click, cntMenueRefresh.Click
@@ -80,6 +101,7 @@ Public Class frmCash
     End Sub
 
     Private Sub cmbBoxYear_TextChanged(sender As Object, e As EventArgs) Handles cmbBoxYear.TextChanged
+        'Check the new year value and read/display the selected cash flow records
         Dim CheckYear As Integer
         If cmbBoxYear.Text = "" Or Integer.TryParse(cmbBoxYear.Text, CheckYear) Then
             readCashFlow(txtBoxSearch.Text)
@@ -90,12 +112,16 @@ Public Class frmCash
     End Sub
 
     Private Sub fillInCmbBoxYear()
+        'Select all saved years from table and fill the combobox with this informations
         cmbBoxYear.Items.Clear()
         Dim Connection As New MySqlConnection
         Connection.ConnectionString = ConnectionString
         Connection.Open()
         Dim QueryString As String =
-            "SELECT YEAR(flow_cash_date ) FROM cashflow GROUP BY YEAR(flow_cash_date ) ORDER BY YEAR(flow_cash_date )"
+            "SELECT YEAR(flow_cash_date) 
+               FROM cashflow 
+              GROUP BY YEAR(flow_cash_date) 
+              ORDER BY YEAR(flow_cash_date)"
         Dim QueryCommand As New MySqlCommand(QueryString, Connection)
         Dim SQLReader As MySqlDataReader
         SQLReader = QueryCommand.ExecuteReader
@@ -110,6 +136,18 @@ Public Class frmCash
     End Sub
 
     Private Sub readCashFlow(ByVal pSearchString As String)
+        If dtaGridCashFlow.Rows.Count > 0 Then
+            'Save the current position in the datagridview
+            Try
+                HScrollSave = dtaGridCashFlow.HorizontalScrollingOffset
+                SelectedRowSave = dtaGridCashFlow.CurrentRow.Index
+            Catch ex As Exception
+                HScrollSave = 0
+                SelectedRowSave = -1
+            End Try
+        Else
+            SelectedRowSave = -1
+        End If
         dtaGridCashFlow.DataSource = Nothing
         Dim Connection As New MySqlConnection
         Connection.ConnectionString = ConnectionString
@@ -133,6 +171,15 @@ Public Class frmCash
             Adapter.SelectCommand = SQLCommand
             Adapter.Fill(Table)
             dtaGridCashFlow.DataSource = Table
+            dtaGridCashFlow.Columns(0).Visible = False
+            If HScrollSave > 0 Then
+                'Set original scrolling position
+                dtaGridCashFlow.HorizontalScrollingOffset = HScrollSave
+            End If
+            If SelectedRowSave >= 0 And SelectedRowSave < dtaGridCashFlow.Rows.Count Then
+                'Set original selected row
+                dtaGridCashFlow.CurrentCell = dtaGridCashFlow.Rows(SelectedRowSave).Cells(1)
+            End If
             dtaGridCashFlow.Refresh()
             Connection.Close()
         Catch ex As MySqlException
@@ -145,7 +192,7 @@ Public Class frmCash
         Dim frmCreateNewCashFlow As New frmManageCashFlow
         frmCreateNewCashFlow.MdiParent = frmMain
         frmCreateNewCashFlow.Text = "Neue Buchung erstellen"
-        frmCreateNewCashFlow.NewRecordMode = vbTrue
+        frmCreateNewCashFlow.NewRecordMode = True
         frmCreateNewCashFlow.CashFlowID = 0
         frmCreateNewCashFlow.Show()
     End Sub
@@ -155,13 +202,24 @@ Public Class frmCash
         frmChangeCashFlow.MdiParent = frmMain
         frmChangeCashFlow.Text = "Eine Buchung bearbeiten"
         For Each SelectedRow As DataGridViewRow In dtaGridCashFlow.SelectedRows
-            frmChangeCashFlow.NewRecordMode = vbFalse
+            frmChangeCashFlow.NewRecordMode = False
             frmChangeCashFlow.CashFlowID = Convert.ToInt32(dtaGridCashFlow.Rows(SelectedRow.Index).Cells(0).Value)
             frmChangeCashFlow.Show()
         Next
     End Sub
 
-    Private Sub deleteCashFlow(ByVal pCashFlowID As Long)
+    Private Sub deleteCashFlow()
+        Dim Result As DialogResult
+        timeReadCashFlow.Stop()
+        For Each SelectedRow As DataGridViewRow In dtaGridCashFlow.SelectedRows
+            Result = MessageBox.Show("Bitte das Löschen der Buchung bestätigen", "Buchung wirklich löschen?", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If Result = System.Windows.Forms.DialogResult.Yes Then
+                deleteCashFlowData(Convert.ToInt64(dtaGridCashFlow.Rows(SelectedRow.Index).Cells(0).Value))
+            End If
+        Next
+    End Sub
+
+    Private Sub deleteCashFlowData(ByVal pCashFlowID As Long)
         Dim DeleteCashFlowConnection As New MySqlConnection
         DeleteCashFlowConnection.ConnectionString = ConnectionString
         Dim DeleteCashFlowString As String =
@@ -179,6 +237,7 @@ Public Class frmCash
     End Sub
 
     Private Sub readTotal(ByVal pYear As String)
+        'Read/sum the total amount for the selected year
         Dim Total As Decimal = 0
         Dim Connection As New MySqlConnection
         Dim returnConnection As New service_GetDataBaseInfos
@@ -187,7 +246,9 @@ Public Class frmCash
         Try
             Connection.Open()
             Dim QueryString As String =
-                "SELECT SUM(flow_amount) FROM cashflow WHERE YEAR(flow_cash_date) = ?PARM_YEAR"
+                "SELECT SUM(flow_amount)
+                   FROM cashflow 
+                  WHERE YEAR(flow_cash_date) = ?PARM_YEAR"
             Dim QueryCommand As New MySqlCommand(QueryString, Connection)
             QueryCommand.Parameters.Add("?PARM_YEAR", MySqlDbType.VarChar).Value = pYear
             Dim SQLReader As MySqlDataReader
@@ -213,10 +274,8 @@ Public Class frmCash
     End Sub
 
     Private Sub refreshCashFlow(ByVal pSearch As String)
-        timeReadCashFlow.Stop()
         fillInCmbBoxYear()
         readCashFlow(pSearch)
-        timeReadCashFlow.Start()
     End Sub
 
     Private Sub timeReadCashFlow_Tick(sender As Object, e As EventArgs) Handles timeReadCashFlow.Tick

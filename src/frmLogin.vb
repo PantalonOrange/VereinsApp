@@ -4,8 +4,11 @@
 
 Public Class frmLogin
 
+    Private checkLogin As New service_CheckLogin
+    Private checkAppVersion As New service_CheckVersion
+
     Private Sub frmLogin_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.KeyPreview = vbTrue
+        Me.KeyPreview = True
         Me.Text = "Anmeldung am VereinsApp (GAR14 1.Batterie)"
         lblUserName.Text = "Benutzer"
         lblPassword.Text = "Passwort"
@@ -16,7 +19,7 @@ Public Class frmLogin
     End Sub
 
     Private Sub frmLogin_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
-        e.Handled = vbTrue
+        e.Handled = True
         Select Case e.KeyCode
             Case Keys.F3
                 Me.Close()
@@ -24,7 +27,6 @@ Public Class frmLogin
     End Sub
 
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
-        Dim checkAppVersion As New service_CheckVersion
         checkAppVersion._checkAppVersion()
         If Not checkAppVersion._returnCheckResult Then
             MessageBox.Show("App und Datenbank haben unterschiedliche Versionen", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -36,11 +38,12 @@ Public Class frmLogin
             MessageBox.Show("Kein Passwort angegeben", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
             txtBoxPassword.Select()
         Else
-            Dim checkLogin As New service_CheckLogin
             checkLogin._checkLogin(txtBoxUserName.Text, txtBoxPassword.Text)
             If checkLogin._returnCheckLogin Then
                 frmMain.User = txtBoxUserName.Text
                 frmMain.Show()
+                txtBoxUserName.Text = ""
+                txtBoxPassword.Text = ""
                 Me.Hide()
             Else
                 txtBoxUserName.Select()

@@ -129,6 +129,8 @@ Partial Class frmManageExpedition
         Me.dtaGridExpeditionMembers.AllowUserToResizeColumns = False
         Me.dtaGridExpeditionMembers.AllowUserToResizeRows = False
         Me.dtaGridExpeditionMembers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
+        Me.dtaGridExpeditionMembers.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.dtaGridExpeditionMembers.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dtaGridExpeditionMembers.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         Me.dtaGridExpeditionMembers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dtaGridExpeditionMembers.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
@@ -280,12 +282,12 @@ Partial Class frmManageExpedition
         '
         Me.cntMouseMenue.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntMenuRemove})
         Me.cntMouseMenue.Name = "cntMenu"
-        Me.cntMouseMenue.Size = New System.Drawing.Size(181, 48)
+        Me.cntMouseMenue.Size = New System.Drawing.Size(126, 26)
         '
         'cntMenuRemove
         '
         Me.cntMenuRemove.Name = "cntMenuRemove"
-        Me.cntMenuRemove.Size = New System.Drawing.Size(180, 22)
+        Me.cntMenuRemove.Size = New System.Drawing.Size(125, 22)
         Me.cntMenuRemove.Text = "&Entfernen"
         '
         'frmManageExpedition

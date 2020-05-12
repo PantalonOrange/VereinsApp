@@ -48,7 +48,7 @@ Partial Class frmMembers
         Me.btnRefresh.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Size = New System.Drawing.Size(169, 28)
-        Me.btnRefresh.TabIndex = 4
+        Me.btnRefresh.TabIndex = 5
         Me.btnRefresh.Text = "Button1"
         Me.btnRefresh.UseVisualStyleBackColor = True
         '
@@ -59,6 +59,8 @@ Partial Class frmMembers
         Me.dtaGridMembers.AllowUserToResizeColumns = False
         Me.dtaGridMembers.AllowUserToResizeRows = False
         Me.dtaGridMembers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
+        Me.dtaGridMembers.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.dtaGridMembers.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dtaGridMembers.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         Me.dtaGridMembers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dtaGridMembers.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
@@ -72,7 +74,7 @@ Partial Class frmMembers
         Me.dtaGridMembers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtaGridMembers.ShowEditingIcon = False
         Me.dtaGridMembers.Size = New System.Drawing.Size(1062, 412)
-        Me.dtaGridMembers.TabIndex = 6
+        Me.dtaGridMembers.TabIndex = 2
         '
         'btnChangeMember
         '
@@ -80,7 +82,7 @@ Partial Class frmMembers
         Me.btnChangeMember.Margin = New System.Windows.Forms.Padding(2)
         Me.btnChangeMember.Name = "btnChangeMember"
         Me.btnChangeMember.Size = New System.Drawing.Size(169, 29)
-        Me.btnChangeMember.TabIndex = 3
+        Me.btnChangeMember.TabIndex = 4
         Me.btnChangeMember.Text = "Button1"
         Me.btnChangeMember.UseVisualStyleBackColor = True
         '
@@ -91,7 +93,7 @@ Partial Class frmMembers
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(169, 28)
-        Me.btnClose.TabIndex = 5
+        Me.btnClose.TabIndex = 6
         Me.btnClose.Text = "Button1"
         Me.btnClose.UseVisualStyleBackColor = True
         '
@@ -101,7 +103,7 @@ Partial Class frmMembers
         Me.btnNewMember.Margin = New System.Windows.Forms.Padding(2)
         Me.btnNewMember.Name = "btnNewMember"
         Me.btnNewMember.Size = New System.Drawing.Size(169, 29)
-        Me.btnNewMember.TabIndex = 2
+        Me.btnNewMember.TabIndex = 3
         Me.btnNewMember.Text = "Button1"
         Me.btnNewMember.UseVisualStyleBackColor = True
         '
@@ -140,7 +142,7 @@ Partial Class frmMembers
         '
         Me.cntMouseMenue.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntMenueNew, Me.cntMenueChange, Me.cntMenueDelete, Me.cntMenueRefresh})
         Me.cntMouseMenue.Name = "ContextMenuStrip1"
-        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 114)
+        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 92)
         '
         'cntMenueNew
         '
@@ -158,6 +160,7 @@ Partial Class frmMembers
         'cntMenueDelete
         '
         Me.cntMenueDelete.Name = "cntMenueDelete"
+        Me.cntMenueDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete
         Me.cntMenueDelete.Size = New System.Drawing.Size(202, 22)
         Me.cntMenueDelete.Text = "&Löschen"
         '

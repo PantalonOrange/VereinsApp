@@ -82,18 +82,18 @@ Partial Class frmMain
         '
         Me.SignOffToolStripMenuItem.Name = "SignOffToolStripMenuItem"
         Me.SignOffToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F3), System.Windows.Forms.Keys)
-        Me.SignOffToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SignOffToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.SignOffToolStripMenuItem.Text = "&Abmelden"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(174, 6)
         '
         'ChangePasswordToolStripMenuItem
         '
         Me.ChangePasswordToolStripMenuItem.Name = "ChangePasswordToolStripMenuItem"
-        Me.ChangePasswordToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ChangePasswordToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.ChangePasswordToolStripMenuItem.Text = "&Passwort ändern"
         '
         'AppsToolStripMenuItem

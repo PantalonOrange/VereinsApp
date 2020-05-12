@@ -1,37 +1,39 @@
 ﻿'DataBaseServices
 'Different services for database connections and queries
 'Database is a MariaDB running on a QNap. Connector is the MySQL-Connector from Oracle
+'For the future add tls connection to MySQLCS
 'Copyright (C)2019,2020 by Christian Brunner
 
-Imports System
-Imports System.Text
 Imports MySql.Data.MySqlClient
 
 Public Class service_GetDataBaseInfos
+    'Create and return the connectionstring for db-connection
 
     Public Function _returnConnectionString()
         Static MySQLCS As New MySqlConnectionStringBuilder
         MySQLCS.Server = "?"
-        MySQLCS.Port = 50000
-        MySQLCS.Database = "?"
-        MySQLCS.UserID = "?"
-        MySQLCS.Password = "?"
-        MySQLCS.UseCompression = vbTrue
+        MySQLCS.Port = 0
+        MySQLCS.Database = ?
+        MySQLCS.UserID = ?
+        MySQLCS.Password = ?
+        MySQLCS.UseCompression = True
         Return MySQLCS.ConnectionString
     End Function
 
 End Class
 
 Public Class service_CheckLogin
+    'Set the last login date to current user, if fail the user or/and the password was wrong
 
-    Private Success As Boolean = vbFalse
+    Private Success As Boolean = False
 
     Public Sub _checkLogin(UserName As String, Password As String)
+        'Incoming values: Username, Password (md5 hash)
         Dim Connection As New MySqlConnection
         Dim returnConnection As New service_GetDataBaseInfos
         Dim ConnectionString As String = returnConnection._returnConnectionString()
         Connection.ConnectionString = ConnectionString
-        Dim hashPassword As New hashString
+        Dim hashPassword As New service_hashString
         Dim HashedPassword As String = hashPassword.returnHashedValue(Password)
 
         Dim SQLQueryString As String =
@@ -46,7 +48,7 @@ Public Class service_CheckLogin
             Connection.Close()
         Catch ex As MySqlException
             MessageBox.Show(ex.Message)
-            Success = vbFalse
+            Success = False
         End Try
     End Sub
 
@@ -57,8 +59,9 @@ Public Class service_CheckLogin
 End Class
 
 Public Class service_CheckVersion
+    'Check the databaseversion with the app-version
 
-    Private Success As Boolean = vbFalse
+    Private Success As Boolean = False
     Private returnAppVersion As New service_ReturnAppVersion
     Private AppVersion As String = returnAppVersion._appVersion
 
@@ -94,6 +97,7 @@ Public Class service_CheckVersion
 End Class
 
 Public Class service_GetSystemValue
+    'Read the systemvalue for submitted key
 
     Private SystemValue As String
 
@@ -127,6 +131,7 @@ Public Class service_GetSystemValue
 End Class
 
 Public Class service_GetNewMemberID
+    'Get the next member id and return this value
 
     Private NewMemberID As Integer
 
@@ -153,6 +158,7 @@ Public Class service_GetNewMemberID
 End Class
 
 Public Class service_GetNewExpeditionID
+    'Get the next expedition id and return this value
 
     Private NewExpeditionID As Long
 
@@ -168,7 +174,7 @@ Public Class service_GetNewExpeditionID
         Dim SQLReader As MySqlDataReader
         SQLReader = QueryCommand.ExecuteReader
         While (SQLReader.Read)
-            NewExpeditionID = Convert.ToInt32(SQLReader(0).ToString)
+            NewExpeditionID = Convert.ToInt64(SQLReader(0).ToString)
             Exit While
         End While
         IDConnection.Close()
@@ -179,6 +185,7 @@ Public Class service_GetNewExpeditionID
 End Class
 
 Public Class service_GetNewCashFlowID
+    'Get the next cash flow id and return this value
 
     Private NewCashFlowID As Long
 
@@ -194,7 +201,7 @@ Public Class service_GetNewCashFlowID
         Dim SQLReader As MySqlDataReader
         SQLReader = QueryCommand.ExecuteReader
         While (SQLReader.Read)
-            NewCashFlowID = Convert.ToInt32(SQLReader(0).ToString)
+            NewCashFlowID = Convert.ToInt64(SQLReader(0).ToString)
             Exit While
         End While
         IDConnection.Close()
@@ -205,6 +212,7 @@ Public Class service_GetNewCashFlowID
 End Class
 
 Public Class service_CheckSecurity
+    'This function checks the security permission for the user and return the result as boolean success
 
     Private Success As Boolean
     Private SecUser As Boolean
@@ -213,6 +221,7 @@ Public Class service_CheckSecurity
     Private SecCash As Boolean
 
     Public Sub _checkSecurity(ByVal pUser As String, ByVal pFunction As String)
+        'Incoming values: Username, Function to check
         Dim Connection As New MySqlConnection
         Dim returnConnection As New service_GetDataBaseInfos
         Dim ConnectionString As String = returnConnection._returnConnectionString()
@@ -236,20 +245,21 @@ Public Class service_CheckSecurity
         Connection.Close()
 
         If pFunction = "USER" And SecUser Then
-            Success = vbTrue
+            Success = True
         ElseIf pFunction = "MEMBER" And SecMember Then
-            Success = vbTrue
+            Success = True
         ElseIf pFunction = "EXPEDITION" And SecExpedition Then
-            Success = vbTrue
+            Success = True
         ElseIf pFunction = "CASH" And SecCash Then
-            Success = vbTrue
+            Success = True
         Else
-            Success = vbFalse
+            Success = False
         End If
 
     End Sub
 
     Public Function _returnSecurityCheck()
+        'Outgiong value: Boolean success
         Return Success
     End Function
 

@@ -2,8 +2,6 @@
 'Create or change expeditions, add or remove members
 'Copyright (C)2019,2020 by Christian Brunner
 
-Imports System
-Imports System.Text
 Imports MySql.Data.MySqlClient
 
 Public Class frmManageExpedition
@@ -16,10 +14,15 @@ Public Class frmManageExpedition
     Private SelectedMemberID As Integer
     Private NewExpeditionID As Long
     Private TemporaryExpeditionID As Long
-    Private Success As Boolean = vbTrue
+    Private Success As Boolean = True
 
     Private Sub frmManageExpedition_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.KeyPreview = vbTrue
+        'Load formular and fill in comboboxes and text-constants like buttons and labels
+        ' If the variable NewRecordMode is ON the form will start with all empty records
+        '  - On NewRecordMode a temporary expeditionID is generated to add the members
+        '     This temporary expeditionID was changed to the new correct one by clicking save
+        ' Is the variable NewRecordMode OFF the form loads the values from the table -> key ExpeditionID
+        Me.KeyPreview = True
         lblExpeditionName.Text = "Bezeichnung"
         lblExpeditionOrganisation.Text = "Veranstalter"
         lblExpeditionCity.Text = "Ort"
@@ -35,10 +38,10 @@ Public Class frmManageExpedition
         If NewRecordMode Then
             getTemporaryExpeditionID()
             ExpeditionID = TemporaryExpeditionID
-            lbltxtid.Visible = vbFalse
-            lblExpeditionID.Visible = vbFalse
-            lblChange.Visible = vbFalse
-            lblChangeDate.Visible = vbFalse
+            lbltxtid.Visible = False
+            lblExpeditionID.Visible = False
+            lblChange.Visible = False
+            lblChangeDate.Visible = False
         Else
             readExpedition(ExpeditionID)
             readExpeditionMembers(ExpeditionID)
@@ -65,6 +68,7 @@ Public Class frmManageExpedition
     End Sub
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+        'Make some checks and write or update the inserted values
         If cmbBoxExpeditionName.Text = "" Then
             MessageBox.Show("Kein Name eingegeben", "Kein Name", MessageBoxButtons.OK, MessageBoxIcon.Error)
             cmbBoxExpeditionName.Select()
@@ -117,6 +121,16 @@ Public Class frmManageExpedition
     Private Sub dtaGridExpeditionMembers_MouseClick(sender As Object, e As MouseEventArgs) Handles dtaGridExpeditionMembers.MouseClick
         If e.Button = Windows.Forms.MouseButtons.Right Then
             cntMouseMenue.Show(Me, e.Location)
+        End If
+    End Sub
+    Private Sub dtaGridExpeditionMembers_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dtaGridExpeditionMembers.CellFormatting
+        If e.RowIndex Mod 2 = 0 Then
+            'Every second row
+            e.CellStyle.ForeColor = Color.Black
+            e.CellStyle.BackColor = Color.LightGray
+        Else
+            e.CellStyle.ForeColor = Color.DarkRed
+            e.CellStyle.BackColor = Color.White
         End If
     End Sub
 
@@ -181,6 +195,7 @@ Public Class frmManageExpedition
     End Sub
 
     Private Sub fillInComboBoxExpeditionMembers(ByVal pExpeditionID As Long)
+        'Fill in the combobox with the members who where not allready inserted to this expedition
         cmbBoxExpeditionMembers.Items.Clear()
         Dim Connection As New MySqlConnection
         Connection.ConnectionString = ConnectionString
@@ -189,7 +204,7 @@ Public Class frmManageExpedition
             "SELECT mem_id, mem_name, mem_firstname, mem_grade
                FROM members 
               WHERE mem_id NOT IN (SELECT exp_mem_id FROM expedition_members WHERE exp_mem_exp_id = ?PARM_EXPEDITION_ID)
-              ORDER BY mem_end DESC, mem_id"
+              ORDER BY mem_end, mem_id"
         Dim QueryCommand As New MySqlCommand(QueryString, Connection)
         QueryCommand.Parameters.Add("?PARM_EXPEDITION_ID", MySqlDbType.Int64).Value = pExpeditionID
         Dim SQLReader As MySqlDataReader
@@ -244,6 +259,7 @@ Public Class frmManageExpedition
         Adapter.SelectCommand = QueryCommand
         Adapter.Fill(Table)
         dtaGridExpeditionMembers.DataSource = Table
+        dtaGridExpeditionMembers.Columns(0).Visible = False
         dtaGridExpeditionMembers.Refresh()
         Connection.Close()
     End Sub
@@ -286,6 +302,7 @@ Public Class frmManageExpedition
     End Sub
 
     Private Sub removeTemporaryMembers(ByVal pExpeditionID As Long)
+        'On NewRecordMode ON by clicking cancel this subroutine delete all temporary members for this expedition
         Dim DeleteTemporaryMemberConnection As New MySqlConnection
         DeleteTemporaryMemberConnection.ConnectionString = ConnectionString
         Dim DeleteTemporaryMemberString As String =
@@ -323,7 +340,7 @@ Public Class frmManageExpedition
         End Try
 
         'Next step write new expedition data
-        Success = vbTrue
+        Success = True
         Dim InsertConnection As New MySqlConnection
         InsertConnection.ConnectionString = ConnectionString
         Dim InsertString As String =
@@ -345,13 +362,13 @@ Public Class frmManageExpedition
             InsertCommand.ExecuteNonQuery()
             InsertConnection.Close()
         Catch ex As MySqlException
-            Success = vbFalse
+            Success = False
             MessageBox.Show(ex.Message, "Datenbankfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
     Private Sub updateExpedition(ByVal pEpeditionID As Long)
-        Success = vbTrue
+        Success = True
         Dim UpdateConnection As New MySqlConnection
         UpdateConnection.ConnectionString = ConnectionString
         Dim UpdateString As String =
@@ -384,7 +401,7 @@ Public Class frmManageExpedition
             UpdateCommand.ExecuteNonQuery()
             UpdateConnection.Close()
         Catch ex As MySqlException
-            Success = vbFalse
+            Success = False
             MessageBox.Show(ex.Message, "Datenbankfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub

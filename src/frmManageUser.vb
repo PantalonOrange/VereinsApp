@@ -2,8 +2,6 @@
 'Create or change app user. Store password as md5 hash
 'Copyright (C)2019,2020 by Christian Brunner
 
-Imports System
-Imports System.Text
 Imports MySql.Data.MySqlClient
 
 Public Class frmManageUser
@@ -21,6 +19,9 @@ Public Class frmManageUser
     Private SaveCheckBoxCash As Boolean
 
     Private Sub frmManageUser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Load formular and fill in text-constants like buttons and labels
+        ' If the variable NewRecordMode is ON the form will start with all empty records
+        ' Is the variable NewRecordMode OFF the form loads the values from the table -> key UserID
         lblUserName.Text = "Benutzerkennung"
         lblName.Text = "Name"
         lblPassword.Text = "Passwort"
@@ -38,21 +39,30 @@ Public Class frmManageUser
         txtBoxUserName.Select()
 
         If NewRecordMode Then
-            lblChange.Visible = vbFalse
-            lblChangeDate.Visible = vbFalse
-            lblLastLogin.Visible = vbFalse
-            lblLastLoginDate.Visible = vbFalse
+            lblChange.Visible = False
+            lblChangeDate.Visible = False
+            lblLastLogin.Visible = False
+            lblLastLoginDate.Visible = False
         End If
 
         If txtBoxUserName.Text = "" Then
-            chkBoxStatus.Checked = vbTrue
+            chkBoxStatus.Checked = True
         Else
             SaveName = txtBoxName.Text
             readSingleUser()
         End If
+
+        'admin user should not be changed
+        If txtBoxUserName.Text = "admin" Then
+            chkBoxUser.Enabled = False
+            chkBoxMember.Enabled = False
+            chkBoxExpedition.Enabled = False
+            chkBoxCash.Enabled = False
+        End If
     End Sub
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+        'Make some checks and write or update the inserted values
         If txtBoxUserName.Text = "" Then
             txtBoxUserName.Select()
             MessageBox.Show("Kein Benutzername", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -61,7 +71,7 @@ Public Class frmManageUser
             MessageBox.Show("Kein Kennwort", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Else
             If txtBoxPassword.Text <> "" Then
-                Dim hashPassword As New hashString
+                Dim hashPassword As New service_hashString
                 HashedPassword = hashPassword.returnHashedValue(txtBoxPassword.Text)
             End If
             If Not NewRecordMode Then
@@ -82,6 +92,7 @@ Public Class frmManageUser
     End Sub
 
     Private Sub chkBoxStatus_CheckedChanged(sender As Object, e As EventArgs) Handles chkBoxStatus.CheckedChanged
+        'admin user should not be changed
         If Not chkBoxStatus.Checked And txtBoxUserName.Text = "admin" Then
             Dim Result As DialogResult
             Result = MessageBox.Show("Den Benutzer ADMIN wirklich deaktivieren?", "Frage zu ADMIN", MessageBoxButtons.YesNo, MessageBoxIcon.Question)

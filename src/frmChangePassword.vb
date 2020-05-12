@@ -2,8 +2,6 @@
 'Change app users password. Store password as md5 hash
 'Copyright (C)2019,2020 by Christian Brunner
 
-Imports System
-Imports System.Text
 Imports MySql.Data.MySqlClient
 
 Public Class frmChangePassword
@@ -49,7 +47,7 @@ Public Class frmChangePassword
     End Sub
 
     Private Sub updateUsersPassword()
-        Dim hashPassword As New hashString
+        Dim hashPassword As New service_hashString
         HashedOldPassword = hashPassword.returnHashedValue(txtBoxOldPassword.Text)
         HashedNewPassword = hashPassword.returnHashedValue(txtBoxNewPassword.Text)
 

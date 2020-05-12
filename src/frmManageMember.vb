@@ -2,8 +2,6 @@
 'Create or change member
 'Copyright (C)2019,2020 by Christian Brunner
 
-Imports System
-Imports System.Text
 Imports MySql.Data.MySqlClient
 
 Public Class frmManageMember
@@ -14,10 +12,13 @@ Public Class frmManageMember
     Public NewRecordMode As Boolean
     Public MemberID As Integer
     Private NewMemberID As Integer
-    Private Success As Boolean = vbTrue
+    Private Success As Boolean = True
 
     Private Sub frmManageMember_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.KeyPreview = vbTrue
+        'Load formular and fill in comboboxes and text-constants like buttons and labels
+        ' If the variable NewRecordMode is ON the form will start with all empty records
+        ' Is the variable NewRecordMode OFF the form loads the values from the table -> key MemberID
+        Me.KeyPreview = True
         lblMemberName.Text = "Name/Vorname"
         lblStreet.Text = "Strasse"
         lblZipCity.Text = "Plz/Ort"
@@ -40,12 +41,12 @@ Public Class frmManageMember
         If NewRecordMode Then
             dateBirthday.Value = Convert.ToDateTime("1900-01-01")
             dateStart.Value = Convert.ToDateTime("1900-01-01")
-            chkBoxEnd.Checked = vbFalse
+            chkBoxEnd.Checked = False
             dateEnd.Enabled = chkBoxEnd.Checked
-            lblChange.Visible = vbFalse
-            lblChangeDate.Visible = vbFalse
-            lbltxtid.Visible = vbFalse
-            lblid.Visible = vbFalse
+            lblChange.Visible = False
+            lblChangeDate.Visible = False
+            lbltxtid.Visible = False
+            lblid.Visible = False
         Else
             readMember(MemberID)
         End If
@@ -59,14 +60,15 @@ Public Class frmManageMember
     End Sub
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+        'Make some checks and write or update the inserted values
         If txtBoxMemberName.Text = "" Then
             MessageBox.Show("Kein Name eingegeben!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
             txtBoxMemberName.Select()
-            Success = vbFalse
+            Success = False
         ElseIf txtBoxFirstName.Text = "" Then
             MessageBox.Show("Kein Vornamename eingegeben!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
             txtBoxFirstName.Select()
-            Success = vbFalse
+            Success = False
         Else
             If NewRecordMode Then
                 saveSingleMember()
@@ -86,7 +88,7 @@ Public Class frmManageMember
 
     Private Sub chkBoxEnd_CheckedChanged(sender As Object, e As EventArgs) Handles chkBoxEnd.CheckedChanged
         dateEnd.Enabled = chkBoxEnd.Checked
-        If chkBoxEnd.Checked = vbTrue Then
+        If chkBoxEnd.Checked Then
             dateEnd.Value = Now.Date
         Else
             dateEnd.Value = Convert.ToDateTime("1900-01-01")
@@ -123,11 +125,11 @@ Public Class frmManageMember
             dateStart.Value = SQLReader(11).ToString
             dateEnd.Value = SQLReader(12).ToString
             If SQLReader(12).ToString = New Date(1900, 1, 1) Then
-                chkBoxEnd.Checked = vbFalse
-                dateEnd.Enabled = vbFalse
+                chkBoxEnd.Checked = False
+                dateEnd.Enabled = False
             Else
-                chkBoxEnd.Checked = vbTrue
-                dateEnd.Enabled = vbTrue
+                chkBoxEnd.Checked = True
+                dateEnd.Enabled = True
             End If
             lblChangeDate.Text = SQLReader(13).ToString & "/" & SQLReader(14).ToString
             Exit While
@@ -152,7 +154,7 @@ Public Class frmManageMember
     End Sub
 
     Private Sub updateSingleMember(ByVal pMemberID As Integer)
-        Success = vbTrue
+        Success = True
 
         Dim UpdateConnection As New MySqlConnection
         UpdateConnection.ConnectionString = ConnectionString
@@ -213,13 +215,13 @@ Public Class frmManageMember
             UpdateCommand.ExecuteNonQuery()
             UpdateConnection.Close()
         Catch ex As MySqlException
-            Success = vbFalse
+            Success = False
             MessageBox.Show(ex.Message, "Datenbankfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
     Private Sub saveSingleMember()
-        Success = vbTrue
+        Success = True
         Dim InsertConnection As New MySqlConnection
         InsertConnection.ConnectionString = ConnectionString
         getNewMemberID()
@@ -257,7 +259,7 @@ Public Class frmManageMember
             InsertCommand.ExecuteNonQuery()
             InsertConnection.Close()
         Catch ex As MySqlException
-            Success = vbFalse
+            Success = False
             MessageBox.Show(ex.Message, "Datenbankfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub

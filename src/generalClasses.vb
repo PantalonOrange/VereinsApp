@@ -2,12 +2,12 @@
 'General classes to use in this project/app
 'Copyright (C)2019,2020 by Christian Brunner
 
-Imports System
 Imports System.Text
 Imports System.Security.Cryptography
 
-Public Class hashString
-    'Hash incoming string as md5
+Public Class service_hashString
+    'Return string as Hash md5
+
     Public Function returnHashedValue(ByVal Original As String) As String
         Dim MD5 As New MD5CryptoServiceProvider
         Dim Data As Byte()
@@ -29,6 +29,7 @@ Public Class hashString
 End Class
 
 Public Class service_ReturnAppVersion
+    'Return the current version for this app to check with the databaseversion
 
     Private Version As String = "v1r1m0"
 

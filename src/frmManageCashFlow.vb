@@ -2,8 +2,6 @@
 'Create or change cash flows for the current account
 'Copyright (C)2019,2020 by Christian Brunner
 
-Imports System
-Imports System.Text
 Imports MySql.Data.MySqlClient
 
 Public Class frmManageCashFlow
@@ -13,11 +11,14 @@ Public Class frmManageCashFlow
 
     Public NewRecordMode As Boolean
     Public CashFlowID As Long
-    Private Success As Boolean = vbTrue
+    Private Success As Boolean = True
     Private NewCashFlowID As Long
 
     Private Sub frmManageCashFlow_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.KeyPreview = vbTrue
+        'Load formular and fill in comboboxes and text-constants like buttons and labels
+        ' If the variable NewRecordMode is ON the form will start with all empty records
+        ' Is the variable NewRecordMode OFF the form loads the values from the table -> key CashFlowID
+        Me.KeyPreview = True
         lblCashFlowDescription.Text = "Beschreibung"
         lblCashFlowTarget.Text = "Gegenstelle"
         lblCashFlowAmount.Text = "Wert"
@@ -32,16 +33,16 @@ Public Class frmManageCashFlow
         fillInCmbBoxCashFlowDescription()
         fillInCmbBoxCashFlowTarget()
         If frmMain.User.ToLower = "admin" Then
-            dateCashFlowDataDate.Enabled = vbTrue
+            dateCashFlowDataDate.Enabled = True
         End If
         If NewRecordMode Then
             txtBoxCashFlowAmount.Text = "0.00"
             dateCashFlowDate.Value = Date.Now
             dateCashFlowDataDate.Value = Date.Now
-            lbltxtid.Visible = vbFalse
-            lblChange.Visible = vbFalse
-            lblChangeDate.Visible = vbFalse
-            lblCashFlowID.Visible = vbFalse
+            lbltxtid.Visible = False
+            lblChange.Visible = False
+            lblChangeDate.Visible = False
+            lblCashFlowID.Visible = False
         Else
             readCashFlow(CashFlowID)
         End If
@@ -55,23 +56,24 @@ Public Class frmManageCashFlow
     End Sub
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+        'Make some checks and write or update the inserted values
         Dim TryAmount As Decimal
         If cmbBoxCashFlowDescription.Text = "" Then
             MessageBox.Show("Keine Beschreibung eingegeben!", "Fehlende Beschreibung", MessageBoxButtons.OK, MessageBoxIcon.Error)
             cmbBoxCashFlowDescription.Select()
-            Success = vbFalse
+            Success = False
         ElseIf cmbBoxCashFlowTarget.Text = "" Then
             MessageBox.Show("Keine Gegenstelle eingegeben!", "Fehlende Gegenstelle", MessageBoxButtons.OK, MessageBoxIcon.Error)
             cmbBoxCashFlowTarget.Select()
-            Success = vbFalse
+            Success = False
         ElseIf txtBoxCashFlowAmount.Text = "" Then
             MessageBox.Show("Kein Wert eingegeben!", "Fehlender Wert", MessageBoxButtons.OK, MessageBoxIcon.Error)
             txtBoxCashFlowAmount.Select()
-            Success = vbFalse
+            Success = False
         ElseIf Not Decimal.TryParse(txtBoxCashFlowAmount.Text, TryAmount) Then
             MessageBox.Show("Es wurde ein ungültiger Wert eingegeben!", "Ungültiger Wert", MessageBoxButtons.OK, MessageBoxIcon.Error)
             txtBoxCashFlowAmount.Select()
-            Success = vbFalse
+            Success = False
         Else
             If NewRecordMode Then
                 saveCashFlow()
@@ -154,7 +156,7 @@ Public Class frmManageCashFlow
     End Sub
 
     Private Sub saveCashFlow()
-        Success = vbTrue
+        Success = True
 
         getNewCashFlowID()
 
@@ -180,14 +182,14 @@ Public Class frmManageCashFlow
                 InsertCommand.ExecuteNonQuery()
                 InsertConnection.Close()
             Catch ex As MySqlException
-                Success = vbFalse
+                Success = False
                 MessageBox.Show(ex.Message, "Datenbankfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End If
     End Sub
 
     Private Sub updateCashFlow(ByVal pCashFlowID As Long)
-        Success = vbTrue
+        Success = True
 
         Dim UpdateConnection As New MySqlConnection
         UpdateConnection.ConnectionString = ConnectionString
@@ -222,7 +224,7 @@ Public Class frmManageCashFlow
             UpdateCommand.ExecuteNonQuery()
             UpdateConnection.Close()
         Catch ex As MySqlException
-            Success = vbFalse
+            Success = False
             MessageBox.Show(ex.Message, "Datenbankfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub

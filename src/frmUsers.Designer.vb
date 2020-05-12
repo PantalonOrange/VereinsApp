@@ -34,38 +34,40 @@ Partial Class frmUsers
         Me.cntMenueChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntMenueDelete = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntMenueRefresh = New System.Windows.Forms.ToolStripMenuItem()
+        Me.txtBoxSearch = New System.Windows.Forms.TextBox()
+        Me.lblSearch = New System.Windows.Forms.Label()
         CType(Me.dtaGridUsers, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.cntMouseMenue.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnNewUser
         '
-        Me.btnNewUser.Location = New System.Drawing.Point(192, 355)
+        Me.btnNewUser.Location = New System.Drawing.Point(88, 355)
         Me.btnNewUser.Margin = New System.Windows.Forms.Padding(2)
         Me.btnNewUser.Name = "btnNewUser"
         Me.btnNewUser.Size = New System.Drawing.Size(169, 29)
-        Me.btnNewUser.TabIndex = 1
+        Me.btnNewUser.TabIndex = 3
         Me.btnNewUser.Text = "Button1"
         Me.btnNewUser.UseVisualStyleBackColor = True
         '
         'btnClose
         '
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnClose.Location = New System.Drawing.Point(718, 356)
+        Me.btnClose.Location = New System.Drawing.Point(614, 356)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(169, 28)
-        Me.btnClose.TabIndex = 4
+        Me.btnClose.TabIndex = 6
         Me.btnClose.Text = "Button1"
         Me.btnClose.UseVisualStyleBackColor = True
         '
         'btnChangeUser
         '
-        Me.btnChangeUser.Location = New System.Drawing.Point(372, 355)
+        Me.btnChangeUser.Location = New System.Drawing.Point(268, 355)
         Me.btnChangeUser.Margin = New System.Windows.Forms.Padding(2)
         Me.btnChangeUser.Name = "btnChangeUser"
         Me.btnChangeUser.Size = New System.Drawing.Size(169, 29)
-        Me.btnChangeUser.TabIndex = 2
+        Me.btnChangeUser.TabIndex = 4
         Me.btnChangeUser.Text = "Button1"
         Me.btnChangeUser.UseVisualStyleBackColor = True
         '
@@ -76,10 +78,12 @@ Partial Class frmUsers
         Me.dtaGridUsers.AllowUserToResizeColumns = False
         Me.dtaGridUsers.AllowUserToResizeRows = False
         Me.dtaGridUsers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
+        Me.dtaGridUsers.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.dtaGridUsers.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.dtaGridUsers.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         Me.dtaGridUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dtaGridUsers.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.dtaGridUsers.Location = New System.Drawing.Point(8, 8)
+        Me.dtaGridUsers.Location = New System.Drawing.Point(8, 31)
         Me.dtaGridUsers.Margin = New System.Windows.Forms.Padding(2)
         Me.dtaGridUsers.MultiSelect = False
         Me.dtaGridUsers.Name = "dtaGridUsers"
@@ -88,8 +92,8 @@ Partial Class frmUsers
         Me.dtaGridUsers.RowTemplate.Height = 28
         Me.dtaGridUsers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtaGridUsers.ShowEditingIcon = False
-        Me.dtaGridUsers.Size = New System.Drawing.Size(879, 343)
-        Me.dtaGridUsers.TabIndex = 5
+        Me.dtaGridUsers.Size = New System.Drawing.Size(775, 320)
+        Me.dtaGridUsers.TabIndex = 2
         '
         'timerReadUser
         '
@@ -99,11 +103,11 @@ Partial Class frmUsers
         'btnRefresh
         '
         Me.btnRefresh.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnRefresh.Location = New System.Drawing.Point(545, 356)
+        Me.btnRefresh.Location = New System.Drawing.Point(441, 356)
         Me.btnRefresh.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Size = New System.Drawing.Size(169, 28)
-        Me.btnRefresh.TabIndex = 3
+        Me.btnRefresh.TabIndex = 5
         Me.btnRefresh.Text = "Button1"
         Me.btnRefresh.UseVisualStyleBackColor = True
         '
@@ -111,7 +115,7 @@ Partial Class frmUsers
         '
         Me.cntMouseMenue.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntMenueNew, Me.cntMenueChange, Me.cntMenueDelete, Me.cntMenueRefresh})
         Me.cntMouseMenue.Name = "ContextMenuStrip1"
-        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 92)
+        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 114)
         '
         'cntMenueNew
         '
@@ -129,6 +133,7 @@ Partial Class frmUsers
         'cntMenueDelete
         '
         Me.cntMenueDelete.Name = "cntMenueDelete"
+        Me.cntMenueDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete
         Me.cntMenueDelete.Size = New System.Drawing.Size(202, 22)
         Me.cntMenueDelete.Text = "&Löschen"
         '
@@ -139,13 +144,32 @@ Partial Class frmUsers
         Me.cntMenueRefresh.Size = New System.Drawing.Size(202, 22)
         Me.cntMenueRefresh.Text = "&Ansicht aktualisieren"
         '
+        'txtBoxSearch
+        '
+        Me.txtBoxSearch.Location = New System.Drawing.Point(57, 6)
+        Me.txtBoxSearch.MaxLength = 64
+        Me.txtBoxSearch.Name = "txtBoxSearch"
+        Me.txtBoxSearch.Size = New System.Drawing.Size(725, 20)
+        Me.txtBoxSearch.TabIndex = 1
+        '
+        'lblSearch
+        '
+        Me.lblSearch.AutoSize = True
+        Me.lblSearch.Location = New System.Drawing.Point(12, 9)
+        Me.lblSearch.Name = "lblSearch"
+        Me.lblSearch.Size = New System.Drawing.Size(39, 13)
+        Me.lblSearch.TabIndex = 14
+        Me.lblSearch.Text = "Label1"
+        '
         'frmUsers
         '
         Me.AcceptButton = Me.btnNewUser
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnClose
-        Me.ClientSize = New System.Drawing.Size(898, 395)
+        Me.ClientSize = New System.Drawing.Size(794, 395)
+        Me.Controls.Add(Me.txtBoxSearch)
+        Me.Controls.Add(Me.lblSearch)
         Me.Controls.Add(Me.btnRefresh)
         Me.Controls.Add(Me.dtaGridUsers)
         Me.Controls.Add(Me.btnChangeUser)
@@ -162,6 +186,7 @@ Partial Class frmUsers
         CType(Me.dtaGridUsers, System.ComponentModel.ISupportInitialize).EndInit()
         Me.cntMouseMenue.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents btnNewUser As Button
@@ -175,4 +200,6 @@ Partial Class frmUsers
     Friend WithEvents cntMenueChange As ToolStripMenuItem
     Friend WithEvents cntMenueDelete As ToolStripMenuItem
     Friend WithEvents cntMenueRefresh As ToolStripMenuItem
+    Friend WithEvents txtBoxSearch As TextBox
+    Friend WithEvents lblSearch As Label
 End Class

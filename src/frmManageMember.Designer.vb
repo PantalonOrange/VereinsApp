@@ -53,6 +53,9 @@ Partial Class frmManageMember
         Me.lblGrade = New System.Windows.Forms.Label()
         Me.cmbBoxGrade = New System.Windows.Forms.ComboBox()
         Me.txtBoxFirstName = New System.Windows.Forms.TextBox()
+        Me.picBoxGrade = New System.Windows.Forms.PictureBox()
+        Me.chkBoxSupporter = New System.Windows.Forms.CheckBox()
+        CType(Me.picBoxGrade, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btnCancel
@@ -62,7 +65,7 @@ Partial Class frmManageMember
         Me.btnCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(131, 44)
-        Me.btnCancel.TabIndex = 16
+        Me.btnCancel.TabIndex = 17
         Me.btnCancel.Text = "Button1"
         Me.btnCancel.UseVisualStyleBackColor = True
         '
@@ -72,7 +75,7 @@ Partial Class frmManageMember
         Me.btnSave.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(183, 44)
-        Me.btnSave.TabIndex = 15
+        Me.btnSave.TabIndex = 16
         Me.btnSave.Text = "Button1"
         Me.btnSave.UseVisualStyleBackColor = True
         '
@@ -233,14 +236,14 @@ Partial Class frmManageMember
         Me.dateBirthday.Location = New System.Drawing.Point(106, 178)
         Me.dateBirthday.Name = "dateBirthday"
         Me.dateBirthday.Size = New System.Drawing.Size(200, 20)
-        Me.dateBirthday.TabIndex = 11
+        Me.dateBirthday.TabIndex = 12
         '
         'dateStart
         '
         Me.dateStart.Location = New System.Drawing.Point(106, 199)
         Me.dateStart.Name = "dateStart"
         Me.dateStart.Size = New System.Drawing.Size(200, 20)
-        Me.dateStart.TabIndex = 12
+        Me.dateStart.TabIndex = 13
         '
         'lblStart
         '
@@ -257,7 +260,7 @@ Partial Class frmManageMember
         Me.dateEnd.Location = New System.Drawing.Point(106, 220)
         Me.dateEnd.Name = "dateEnd"
         Me.dateEnd.Size = New System.Drawing.Size(200, 20)
-        Me.dateEnd.TabIndex = 14
+        Me.dateEnd.TabIndex = 15
         '
         'lblEnd
         '
@@ -275,7 +278,7 @@ Partial Class frmManageMember
         Me.chkBoxEnd.Location = New System.Drawing.Point(312, 223)
         Me.chkBoxEnd.Name = "chkBoxEnd"
         Me.chkBoxEnd.Size = New System.Drawing.Size(15, 14)
-        Me.chkBoxEnd.TabIndex = 13
+        Me.chkBoxEnd.TabIndex = 14
         Me.chkBoxEnd.UseVisualStyleBackColor = True
         '
         'lbltxtid
@@ -330,11 +333,12 @@ Partial Class frmManageMember
         '
         'cmbBoxGrade
         '
+        Me.cmbBoxGrade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbBoxGrade.FormattingEnabled = True
         Me.cmbBoxGrade.Location = New System.Drawing.Point(106, 156)
         Me.cmbBoxGrade.MaxLength = 128
         Me.cmbBoxGrade.Name = "cmbBoxGrade"
-        Me.cmbBoxGrade.Size = New System.Drawing.Size(421, 21)
+        Me.cmbBoxGrade.Size = New System.Drawing.Size(331, 21)
         Me.cmbBoxGrade.TabIndex = 10
         '
         'txtBoxFirstName
@@ -346,6 +350,24 @@ Partial Class frmManageMember
         Me.txtBoxFirstName.Size = New System.Drawing.Size(220, 20)
         Me.txtBoxFirstName.TabIndex = 2
         '
+        'picBoxGrade
+        '
+        Me.picBoxGrade.Location = New System.Drawing.Point(396, 178)
+        Me.picBoxGrade.Name = "picBoxGrade"
+        Me.picBoxGrade.Size = New System.Drawing.Size(131, 69)
+        Me.picBoxGrade.TabIndex = 40
+        Me.picBoxGrade.TabStop = False
+        '
+        'chkBoxSupporter
+        '
+        Me.chkBoxSupporter.AutoSize = True
+        Me.chkBoxSupporter.Location = New System.Drawing.Point(443, 157)
+        Me.chkBoxSupporter.Name = "chkBoxSupporter"
+        Me.chkBoxSupporter.Size = New System.Drawing.Size(81, 17)
+        Me.chkBoxSupporter.TabIndex = 11
+        Me.chkBoxSupporter.Text = "CheckBox1"
+        Me.chkBoxSupporter.UseVisualStyleBackColor = True
+        '
         'frmManageMember
         '
         Me.AcceptButton = Me.btnSave
@@ -353,6 +375,8 @@ Partial Class frmManageMember
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
         Me.ClientSize = New System.Drawing.Size(533, 300)
+        Me.Controls.Add(Me.chkBoxSupporter)
+        Me.Controls.Add(Me.picBoxGrade)
         Me.Controls.Add(Me.txtBoxFirstName)
         Me.Controls.Add(Me.cmbBoxGrade)
         Me.Controls.Add(Me.lblGrade)
@@ -392,6 +416,7 @@ Partial Class frmManageMember
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "frmManageMember"
+        CType(Me.picBoxGrade, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -428,4 +453,6 @@ Partial Class frmManageMember
     Friend WithEvents lblGrade As Label
     Friend WithEvents cmbBoxGrade As ComboBox
     Friend WithEvents txtBoxFirstName As TextBox
+    Friend WithEvents picBoxGrade As PictureBox
+    Friend WithEvents chkBoxSupporter As CheckBox
 End Class

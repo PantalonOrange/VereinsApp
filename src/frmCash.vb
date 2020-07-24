@@ -20,14 +20,19 @@ Public Class frmCash
         lblYear.Text = "Jahr"
         lblTxtTotal.Text = "Total"
         lblTotal.Text = ""
+        lblRefresh.Text = "Aktualisiere, bitte warten ..."
+        lblRefresh.Visible = False
         cmbBoxYear.Text = Convert.ToString(Date.Now.Year)
         btnNewFlow.Text = "&Neue Buchung (F6)"
         btnChangeFlow.Text = "&Buchung bearbeiten"
         btnDelete.Text = "&Lö"
         btnRefresh.Text = "&Akt (F5)"
         btnClose.Text = "&Schließen (F3)"
-        fillInCmbBoxYear()
-        readCashFlow(txtBoxSearch.Text)
+        refreshCashFlow(txtBoxSearch.Text)
+    End Sub
+
+    Private Sub frmCash_Closed(sender As Object, e As EventArgs) Handles MyBase.Closed
+        frmMain.RunningModules.CashFlow = False
     End Sub
 
     Private Sub frmCash_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
@@ -160,7 +165,7 @@ Public Class frmCash
                FROM cashflow 
               WHERE YEAR(flow_cash_date) = CASE WHEN ?PARM_YEAR = '' THEN YEAR(flow_cash_date) ELSE ?PARM_YEAR END
                 AND (UPPER(flow_description) LIKE ?PARM_SEARCH OR UPPER(flow_target) LIKE ?PARM_SEARCH)
-              ORDER BY flow_cash_date, flow_id"
+              ORDER BY flow_cash_date DESC, flow_id DESC"
         Try
             Connection.Open()
             Dim SQLCommand As New MySqlCommand(SQLQueryString, Connection)
@@ -274,8 +279,20 @@ Public Class frmCash
     End Sub
 
     Private Sub refreshCashFlow(ByVal pSearch As String)
+        lblYear.Visible = False
+        cmbBoxYear.Visible = False
+        lblTxtTotal.Visible = False
+        lblTotal.Visible = False
+        lblRefresh.Visible = True
+
         fillInCmbBoxYear()
         readCashFlow(pSearch)
+
+        lblYear.Visible = True
+        cmbBoxYear.Visible = True
+        lblTxtTotal.Visible = True
+        lblTotal.Visible = True
+        lblRefresh.Visible = False
     End Sub
 
     Private Sub timeReadCashFlow_Tick(sender As Object, e As EventArgs) Handles timeReadCashFlow.Tick

@@ -23,9 +23,14 @@ Public Class frmExpeditions
         btnClose.Text = "&Schließen (F3)"
         lblSearch.Text = "Suche"
         lblYear.Text = "Jahr:"
-        cmbBoxYear.Text = DateTime.Now.Year
-        fillInCmbBoxYear()
-        readExpeditions(txtBoxSearch.Text)
+        lblRefresh.Text = "Aktualisiere, bitte warten ..."
+        lblRefresh.Visible = False
+        cmbBoxYear.Text = Convert.ToString(Date.Now.Year)
+        refreshExpedition(txtBoxSearch.Text)
+    End Sub
+
+    Private Sub frmExpeditions_Closed(sender As Object, e As EventArgs) Handles MyBase.Closed
+        frmMain.RunningModules.Expedition = False
     End Sub
 
     Private Sub frmExpeditions_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
@@ -147,7 +152,8 @@ Public Class frmExpeditions
         Connection.ConnectionString = ConnectionString
         Dim SQLQueryString As String =
             "SELECT exp_id ID, exp_name 'Bezeichnung', IFNULL(exp_organisation, '') 'Veranstalter', IFNULL(exp_city, '') 'Veranstaltungs-Ort', 
-                    exp_date_from 'Veranstaltung-Von', exp_date_to 'Veranstaltung-Bis' 
+                    exp_date_from 'Veranstaltung-Von', exp_date_to 'Veranstaltung-Bis', 
+                    (SELECT count(*) FROM expedition_members WHERE exp_mem_exp_id = exp_id) 'Teilnehmer', exp_artillery 'Kanone'
                FROM expeditions 
               WHERE YEAR(exp_date_from) = CASE WHEN ?PARM_YEAR = '' THEN YEAR(exp_date_from) ELSE ?PARM_YEAR END
                 AND (UPPER(exp_name) LIKE ?PARM_SEARCH OR UPPER(exp_organisation) LIKE ?PARM_SEARCH OR UPPER(exp_city) LIKE ?PARM_SEARCH)
@@ -244,8 +250,16 @@ Public Class frmExpeditions
     End Sub
 
     Private Sub refreshExpedition(ByVal pSearch As String)
+        lblYear.Visible = False
+        cmbBoxYear.Visible = False
+        lblRefresh.Visible = True
+
         fillInCmbBoxYear()
         readExpeditions(pSearch)
+
+        lblRefresh.Visible = False
+        lblYear.Visible = True
+        cmbBoxYear.Visible = True
     End Sub
 
     Private Sub timerReadExpeditions_Tick(sender As Object, e As EventArgs) Handles timerReadExpeditions.Tick

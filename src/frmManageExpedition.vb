@@ -27,7 +27,8 @@ Public Class frmManageExpedition
         lblExpeditionOrganisation.Text = "Veranstalter"
         lblExpeditionCity.Text = "Ort"
         lblDate.Text = "Von/Bis"
-        grpBoxExpeditionMembers.Text = "Mitglieder"
+        chkBoxArtillery.Text = "Mit Kanone"
+        grpBoxExpeditionMembers.Text = "Teilnehmer"
         grpBoxAdditions.Text = "Zusatzinformationen"
         lbltxtid.Text = "ID"
         lblChange.Text = "Änderung"
@@ -72,6 +73,9 @@ Public Class frmManageExpedition
         If cmbBoxExpeditionName.Text = "" Then
             MessageBox.Show("Kein Name eingegeben", "Kein Name", MessageBoxButtons.OK, MessageBoxIcon.Error)
             cmbBoxExpeditionName.Select()
+        ElseIf dateEnd.Value.ToString("yyyy-MM-dd") < dateBegin.Value.ToString("yyyy-MM-dd") Then
+            MessageBox.Show("Datum bis ist größer als Datum von", "Fehler Datum bis", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            dateEnd.Select()
         Else
             If NewRecordMode Then
                 saveNewExpedition()
@@ -97,7 +101,7 @@ Public Class frmManageExpedition
             MessageBox.Show("Auswahl leer", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
             Try
-                SelectedMemberID = Convert.ToInt32(cmbBoxExpeditionMembers.Text.Substring(0, cmbBoxExpeditionMembers.Text.IndexOf("-")))
+                SelectedMemberID = cmbBoxExpeditionMembers.SelectedValue
             Catch ex As Exception
                 MessageBox.Show(ex.Message, "Fehler bei Konvertierung", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 SelectedMemberID = 0
@@ -132,6 +136,10 @@ Public Class frmManageExpedition
             e.CellStyle.ForeColor = Color.DarkRed
             e.CellStyle.BackColor = Color.White
         End If
+    End Sub
+
+    Private Sub dateBegin_ValueChanged(sender As Object, e As EventArgs) Handles dateBegin.ValueChanged
+        dateEnd.Value = dateBegin.Value
     End Sub
 
     Private Sub fillInCmbBoxExpeditionName()
@@ -196,22 +204,25 @@ Public Class frmManageExpedition
 
     Private Sub fillInComboBoxExpeditionMembers(ByVal pExpeditionID As Long)
         'Fill in the combobox with the members who where not allready inserted to this expedition
-        cmbBoxExpeditionMembers.Items.Clear()
         Dim Connection As New MySqlConnection
         Connection.ConnectionString = ConnectionString
         Connection.Open()
         Dim QueryString As String =
-            "SELECT mem_id, mem_name, mem_firstname, mem_grade
-               FROM members 
-              WHERE mem_id NOT IN (SELECT exp_mem_id FROM expedition_members WHERE exp_mem_exp_id = ?PARM_EXPEDITION_ID)
-              ORDER BY mem_end, mem_id"
+            "SELECT mem_id AS ID, CONCAT(RTRIM(mem_name), ' ', RTRIM(mem_firstname), ' (', RTRIM(IFNULL(grade_description, '?')), ')',
+                    CASE WHEN mem_end IS NOT NULL THEN ' (ausgeschieden)' ELSE '' END) AS Data
+               FROM members
+               LEFT JOIN grades ON (grade_id = IFNULL(mem_grade, 0))
+              WHERE mem_id NOT IN (SELECT exp_mem_id FROM expedition_members WHERE exp_mem_exp_id = ?PARM_EXPEDITION_ID) AND mem_supporter IS NULL
+              ORDER BY mem_end, mem_name, mem_firstname, mem_id"
         Dim QueryCommand As New MySqlCommand(QueryString, Connection)
         QueryCommand.Parameters.Add("?PARM_EXPEDITION_ID", MySqlDbType.Int64).Value = pExpeditionID
-        Dim SQLReader As MySqlDataReader
-        SQLReader = QueryCommand.ExecuteReader
-        While (SQLReader.Read)
-            cmbBoxExpeditionMembers.Items.Add(SQLReader(0).ToString & "-" + SQLReader(1).ToString & " " + SQLReader(2).ToString & "-" & SQLReader(3).ToString)
-        End While
+        Dim Table As New DataTable
+        Dim Adapter As New MySqlDataAdapter
+        Adapter.SelectCommand = QueryCommand
+        Adapter.Fill(Table)
+        cmbBoxExpeditionMembers.DataSource = Table
+        cmbBoxExpeditionMembers.DisplayMember = "Data"
+        cmbBoxExpeditionMembers.ValueMember = "ID"
         Connection.Close()
     End Sub
 
@@ -221,7 +232,7 @@ Public Class frmManageExpedition
         Connection.Open()
         Dim QueryString As String =
             "SELECT exp_name, IFNULL(exp_organisation, ''), IFNULL(exp_city, ''), IFNULL(exp_date_from, CURRENT_DATE), IFNULL(exp_date_to, CURRENT_DATE),
-                    IFNULL(exp_additionals, ''), exp_change, exp_user
+                    IFNULL(exp_artillery, 0), IFNULL(exp_additionals, ''), exp_change, exp_user
                FROM expeditions 
               WHERE exp_id = ?PARM_EXPEDITION_ID"
         Dim QueryCommand As New MySqlCommand(QueryString, Connection)
@@ -234,8 +245,9 @@ Public Class frmManageExpedition
             cmbBoxExpeditionCity.Text = SQLReader(2).ToString
             dateBegin.Value = SQLReader(3).ToString
             dateEnd.Value = SQLReader(4).ToString
-            txtBoxAdditionals.Text = SQLReader(5).ToString.Replace("^", vbCrLf)
-            lblChangeDate.Text = SQLReader(6).ToString & "/" & SQLReader(7).ToString
+            chkBoxArtillery.Checked = SQLReader(5).ToString
+            txtBoxAdditionals.Text = SQLReader(6).ToString.Replace("^", vbCrLf)
+            lblChangeDate.Text = SQLReader(7).ToString & "/" & SQLReader(8).ToString
             Exit While
         End While
         Connection.Close()
@@ -247,11 +259,13 @@ Public Class frmManageExpedition
         Connection.ConnectionString = ConnectionString
         Connection.Open()
         Dim QueryString As String =
-            "SELECT mem_id 'ID', mem_name 'Name', mem_firstname 'Vorname', mem_grade 'Rang', mem_function 'Vereins-Funktion'
+            "SELECT mem_id 'ID', mem_name 'Name', mem_firstname 'Vorname', grade_description 'Rang', mem_function 'Vereins-Funktion',
+                    CASE WHEN mem_end IS NOT NULL THEN 'Ausgeschieden' ELSE 'Aktiv' END 'Aktueller Status'
                FROM expedition_members 
-               JOIN members ON (mem_id = exp_mem_id) 
+               JOIN members ON (mem_id = exp_mem_id)
+               LEFT JOIN grades ON (grade_id = mem_grade)
               WHERE exp_mem_exp_id = ?PARM_EXPEDITION_ID
-              ORDER BY mem_id"
+              ORDER BY mem_name, mem_firstname, mem_end, mem_id"
         Dim QueryCommand As New MySqlCommand(QueryString, Connection)
         QueryCommand.Parameters.Add("?PARM_EXPEDITION_ID", MySqlDbType.Int64).Value = pExpeditionID
         Dim Table As New DataTable
@@ -344,10 +358,10 @@ Public Class frmManageExpedition
         Dim InsertConnection As New MySqlConnection
         InsertConnection.ConnectionString = ConnectionString
         Dim InsertString As String =
-            "INSERT INTO expeditions (exp_id, exp_name, exp_organisation, exp_city, exp_date_from, exp_date_to, exp_additionals, exp_user)
+            "INSERT INTO expeditions (exp_id, exp_name, exp_organisation, exp_city, exp_date_from, exp_date_to, exp_artillery, exp_additionals, exp_user)
              VALUES(?PARM_EXPEDITION_ID, ?PARM_EXPEDITION_NAME, NULLIF(?PARM_EXPEDITION_ORGANISATION, ''), 
                     NULLIF(?PARM_EXPEDITION_CITY, ''), ?PARM_EXPEDITION_DATE_FROM, ?PARM_EXPEDITION_DATE_TO, 
-                           NULLIF(RTRIM(?PARM_EXPEDITION_ADDITIONALS), ''), ?PARM_LAST_USER)"
+                           NULLIF(?PARM_EXPEDITION_ARTILLERY, 0), NULLIF(RTRIM(?PARM_EXPEDITION_ADDITIONALS), ''), ?PARM_LAST_USER)"
         Dim InsertCommand As New MySqlCommand(InsertString, InsertConnection)
         InsertCommand.Parameters.Add("?PARM_EXPEDITION_ID", MySqlDbType.Int64).Value = NewExpeditionID
         InsertCommand.Parameters.Add("?PARM_EXPEDITION_NAME", MySqlDbType.VarChar).Value = cmbBoxExpeditionName.Text
@@ -355,6 +369,7 @@ Public Class frmManageExpedition
         InsertCommand.Parameters.Add("?PARM_EXPEDITION_CITY", MySqlDbType.VarChar).Value = cmbBoxExpeditionCity.Text
         InsertCommand.Parameters.Add("?PARM_EXPEDITION_DATE_FROM", MySqlDbType.Date).Value = dateBegin.Value.ToString("yyyy-MM-dd")
         InsertCommand.Parameters.Add("?PARM_EXPEDITION_DATE_TO", MySqlDbType.Date).Value = dateEnd.Value.ToString("yyyy-MM-dd")
+        InsertCommand.Parameters.Add("?PARM_EXPEDITION_ARTILLERY", MySqlDbType.Int16).Value = chkBoxArtillery.Checked
         InsertCommand.Parameters.Add("PARM_EXPEDITION_ADDITIONALS", MySqlDbType.VarChar, 32767).Value = txtBoxAdditionals.Text.Replace(vbCrLf, "^")
         InsertCommand.Parameters.Add("?PARM_LAST_USER", MySqlDbType.VarChar).Value = frmMain.User
         Try
@@ -378,6 +393,7 @@ Public Class frmManageExpedition
                     exp_city = ?PARM_EXPEDITION_CITY,
                     exp_date_from = ?PARM_EXPEDITION_DATE_FROM, 
                     exp_date_to = ?PARM_EXPEDITION_DATE_TO,
+                    exp_artillery = NULLIF(?PARM_EXPEDITION_ARTILLERY, 0),
                     exp_additionals = NULLIF(?PARM_EXPEDITION_ADDITIONALS, ''),
                     exp_change = CURRENT_TIMESTAMP, 
                     exp_user = ?PARM_LAST_USER
@@ -386,6 +402,7 @@ Public Class frmManageExpedition
                                                       exp_city <> ?PARM_EXPEDITION_CITY OR 
                                                       exp_date_from <> ?PARM_EXPEDITION_DATE_FROM OR
                                                       exp_date_to <> ?PARM_EXPEDITION_DATE_TO OR
+                                                      IFNULL(exp_artillery, 0) <> ?PARM_EXPEDITION_ARTILLERY OR
                                                       IFNULL(exp_additionals, '') <> RTRIM(?PARM_EXPEDITION_ADDITIONALS))"
         Dim UpdateCommand As New MySqlCommand(UpdateString, UpdateConnection)
         UpdateCommand.Parameters.Add("?PARM_EXPEDITION_ID", MySqlDbType.Int64).Value = pEpeditionID
@@ -394,6 +411,7 @@ Public Class frmManageExpedition
         UpdateCommand.Parameters.Add("?PARM_EXPEDITION_CITY", MySqlDbType.VarChar).Value = cmbBoxExpeditionCity.Text
         UpdateCommand.Parameters.Add("?PARM_EXPEDITION_DATE_FROM", MySqlDbType.Date).Value = dateBegin.Value.ToString("yyyy-MM-dd")
         UpdateCommand.Parameters.Add("?PARM_EXPEDITION_DATE_TO", MySqlDbType.Date).Value = dateEnd.Value.ToString("yyyy-MM-dd")
+        UpdateCommand.Parameters.Add("?PARM_EXPEDITION_ARTILLERY", MySqlDbType.Int16).Value = chkBoxArtillery.Checked
         UpdateCommand.Parameters.Add("PARM_EXPEDITION_ADDITIONALS", MySqlDbType.VarChar, 32767).Value = txtBoxAdditionals.Text.Replace(vbCrLf, "^")
         UpdateCommand.Parameters.Add("?PARM_LAST_USER", MySqlDbType.VarChar).Value = frmMain.User
         Try

@@ -10,8 +10,6 @@ Public Class frmChangePassword
     Private ConnectionString As String = getConnection._returnConnectionString()
 
     Private Success As Boolean
-    Private HashedOldPassword As String
-    Private HashedNewPassword As String
 
     Private Sub frmChangePassword_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Text = "Passwort ändern für Benutzer " & frmMain.User
@@ -48,8 +46,6 @@ Public Class frmChangePassword
 
     Private Sub updateUsersPassword()
         Dim hashPassword As New service_hashString
-        HashedOldPassword = hashPassword.returnHashedValue(txtBoxOldPassword.Text)
-        HashedNewPassword = hashPassword.returnHashedValue(txtBoxNewPassword.Text)
 
         Dim UpdateConnection As New MySqlConnection
         UpdateConnection.ConnectionString = ConnectionString
@@ -61,8 +57,8 @@ Public Class frmChangePassword
                   WHERE user_id = ?PARM_ID AND user_password = ?PARM_PASS_OLD"
         Dim UpdateCommand As New MySqlCommand(UpdateString, UpdateConnection)
         UpdateCommand.Parameters.Add("?PARM_ID", MySqlDbType.VarChar).Value = frmMain.User
-        UpdateCommand.Parameters.Add("?PARM_PASS_OLD", MySqlDbType.VarChar).Value = HashedOldPassword
-        UpdateCommand.Parameters.Add("?PARM_PASS_NEW", MySqlDbType.VarChar).Value = HashedNewPassword
+        UpdateCommand.Parameters.Add("?PARM_PASS_OLD", MySqlDbType.VarChar).Value = hashPassword.returnHashedValue(txtBoxOldPassword.Text)
+        UpdateCommand.Parameters.Add("?PARM_PASS_NEW", MySqlDbType.VarChar).Value = hashPassword.returnHashedValue(txtBoxNewPassword.Text)
         Try
             UpdateConnection.Open()
             Success = (UpdateCommand.ExecuteNonQuery > 0)

@@ -42,6 +42,7 @@ Partial Class frmManageUser
         Me.chkBoxExpedition = New System.Windows.Forms.CheckBox()
         Me.chkBoxCash = New System.Windows.Forms.CheckBox()
         Me.grpBoxSecurity = New System.Windows.Forms.GroupBox()
+        Me.chkBoxDocuments = New System.Windows.Forms.CheckBox()
         Me.grpBoxSecurity.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -127,7 +128,7 @@ Partial Class frmManageUser
         '
         'btnSave
         '
-        Me.btnSave.Location = New System.Drawing.Point(203, 141)
+        Me.btnSave.Location = New System.Drawing.Point(201, 160)
         Me.btnSave.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(183, 44)
@@ -138,7 +139,7 @@ Partial Class frmManageUser
         'btnCancel
         '
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnCancel.Location = New System.Drawing.Point(396, 141)
+        Me.btnCancel.Location = New System.Drawing.Point(394, 160)
         Me.btnCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(131, 44)
@@ -150,7 +151,7 @@ Partial Class frmManageUser
         '
         Me.lblChangeDate.AutoSize = True
         Me.lblChangeDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblChangeDate.Location = New System.Drawing.Point(55, 170)
+        Me.lblChangeDate.Location = New System.Drawing.Point(53, 189)
         Me.lblChangeDate.Name = "lblChangeDate"
         Me.lblChangeDate.Size = New System.Drawing.Size(27, 9)
         Me.lblChangeDate.TabIndex = 65
@@ -160,7 +161,7 @@ Partial Class frmManageUser
         '
         Me.lblChange.AutoSize = True
         Me.lblChange.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblChange.Location = New System.Drawing.Point(11, 170)
+        Me.lblChange.Location = New System.Drawing.Point(9, 189)
         Me.lblChange.Name = "lblChange"
         Me.lblChange.Size = New System.Drawing.Size(27, 9)
         Me.lblChange.TabIndex = 64
@@ -170,7 +171,7 @@ Partial Class frmManageUser
         '
         Me.lblLastLoginDate.AutoSize = True
         Me.lblLastLoginDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblLastLoginDate.Location = New System.Drawing.Point(55, 152)
+        Me.lblLastLoginDate.Location = New System.Drawing.Point(53, 171)
         Me.lblLastLoginDate.Name = "lblLastLoginDate"
         Me.lblLastLoginDate.Size = New System.Drawing.Size(27, 9)
         Me.lblLastLoginDate.TabIndex = 67
@@ -180,7 +181,7 @@ Partial Class frmManageUser
         '
         Me.lblLastLogin.AutoSize = True
         Me.lblLastLogin.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblLastLogin.Location = New System.Drawing.Point(11, 152)
+        Me.lblLastLogin.Location = New System.Drawing.Point(9, 171)
         Me.lblLastLogin.Name = "lblLastLogin"
         Me.lblLastLogin.Size = New System.Drawing.Size(27, 9)
         Me.lblLastLogin.TabIndex = 66
@@ -208,7 +209,7 @@ Partial Class frmManageUser
         'chkBoxMember
         '
         Me.chkBoxMember.AutoSize = True
-        Me.chkBoxMember.Location = New System.Drawing.Point(193, 18)
+        Me.chkBoxMember.Location = New System.Drawing.Point(178, 18)
         Me.chkBoxMember.Name = "chkBoxMember"
         Me.chkBoxMember.Size = New System.Drawing.Size(81, 17)
         Me.chkBoxMember.TabIndex = 70
@@ -218,7 +219,7 @@ Partial Class frmManageUser
         'chkBoxExpedition
         '
         Me.chkBoxExpedition.AutoSize = True
-        Me.chkBoxExpedition.Location = New System.Drawing.Point(286, 18)
+        Me.chkBoxExpedition.Location = New System.Drawing.Point(258, 18)
         Me.chkBoxExpedition.Name = "chkBoxExpedition"
         Me.chkBoxExpedition.Size = New System.Drawing.Size(81, 17)
         Me.chkBoxExpedition.TabIndex = 71
@@ -228,7 +229,7 @@ Partial Class frmManageUser
         'chkBoxCash
         '
         Me.chkBoxCash.AutoSize = True
-        Me.chkBoxCash.Location = New System.Drawing.Point(379, 18)
+        Me.chkBoxCash.Location = New System.Drawing.Point(101, 41)
         Me.chkBoxCash.Name = "chkBoxCash"
         Me.chkBoxCash.Size = New System.Drawing.Size(81, 17)
         Me.chkBoxCash.TabIndex = 72
@@ -237,6 +238,7 @@ Partial Class frmManageUser
         '
         'grpBoxSecurity
         '
+        Me.grpBoxSecurity.Controls.Add(Me.chkBoxDocuments)
         Me.grpBoxSecurity.Controls.Add(Me.chkBoxCash)
         Me.grpBoxSecurity.Controls.Add(Me.chkBoxExpedition)
         Me.grpBoxSecurity.Controls.Add(Me.lblSecurity)
@@ -244,9 +246,19 @@ Partial Class frmManageUser
         Me.grpBoxSecurity.Controls.Add(Me.chkBoxUser)
         Me.grpBoxSecurity.Location = New System.Drawing.Point(6, 90)
         Me.grpBoxSecurity.Name = "grpBoxSecurity"
-        Me.grpBoxSecurity.Size = New System.Drawing.Size(520, 46)
+        Me.grpBoxSecurity.Size = New System.Drawing.Size(520, 65)
         Me.grpBoxSecurity.TabIndex = 73
         Me.grpBoxSecurity.TabStop = False
+        '
+        'chkBoxDocuments
+        '
+        Me.chkBoxDocuments.AutoSize = True
+        Me.chkBoxDocuments.Location = New System.Drawing.Point(178, 41)
+        Me.chkBoxDocuments.Name = "chkBoxDocuments"
+        Me.chkBoxDocuments.Size = New System.Drawing.Size(81, 17)
+        Me.chkBoxDocuments.TabIndex = 74
+        Me.chkBoxDocuments.Text = "CheckBox5"
+        Me.chkBoxDocuments.UseVisualStyleBackColor = True
         '
         'frmManageUser
         '
@@ -254,7 +266,7 @@ Partial Class frmManageUser
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
-        Me.ClientSize = New System.Drawing.Size(536, 193)
+        Me.ClientSize = New System.Drawing.Size(536, 213)
         Me.Controls.Add(Me.lblLastLoginDate)
         Me.Controls.Add(Me.lblLastLogin)
         Me.Controls.Add(Me.lblChangeDate)
@@ -305,4 +317,5 @@ Partial Class frmManageUser
     Friend WithEvents chkBoxExpedition As CheckBox
     Friend WithEvents chkBoxCash As CheckBox
     Friend WithEvents grpBoxSecurity As GroupBox
+    Friend WithEvents chkBoxDocuments As CheckBox
 End Class

@@ -29,27 +29,30 @@ Partial Class frmLogin
         Me.txtBoxPassword = New System.Windows.Forms.TextBox()
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
+        Me.lblVersion = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'lblUserName
         '
         Me.lblUserName.AutoSize = True
-        Me.lblUserName.Location = New System.Drawing.Point(8, 10)
+        Me.lblUserName.Location = New System.Drawing.Point(11, 9)
         Me.lblUserName.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblUserName.Name = "lblUserName"
         Me.lblUserName.Size = New System.Drawing.Size(39, 13)
         Me.lblUserName.TabIndex = 0
         Me.lblUserName.Text = "Label1"
+        Me.lblUserName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblPassword
         '
         Me.lblPassword.AutoSize = True
-        Me.lblPassword.Location = New System.Drawing.Point(8, 27)
+        Me.lblPassword.Location = New System.Drawing.Point(11, 33)
         Me.lblPassword.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblPassword.Name = "lblPassword"
         Me.lblPassword.Size = New System.Drawing.Size(39, 13)
         Me.lblPassword.TabIndex = 1
         Me.lblPassword.Text = "Label1"
+        Me.lblPassword.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'txtBoxUserName
         '
@@ -62,7 +65,7 @@ Partial Class frmLogin
         '
         'txtBoxPassword
         '
-        Me.txtBoxPassword.Location = New System.Drawing.Point(91, 27)
+        Me.txtBoxPassword.Location = New System.Drawing.Point(91, 30)
         Me.txtBoxPassword.Margin = New System.Windows.Forms.Padding(2)
         Me.txtBoxPassword.MaxLength = 128
         Me.txtBoxPassword.Name = "txtBoxPassword"
@@ -72,7 +75,7 @@ Partial Class frmLogin
         '
         'btnLogin
         '
-        Me.btnLogin.Location = New System.Drawing.Point(11, 51)
+        Me.btnLogin.Location = New System.Drawing.Point(14, 54)
         Me.btnLogin.Margin = New System.Windows.Forms.Padding(2)
         Me.btnLogin.Name = "btnLogin"
         Me.btnLogin.Size = New System.Drawing.Size(184, 44)
@@ -83,7 +86,7 @@ Partial Class frmLogin
         'btnCancel
         '
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnCancel.Location = New System.Drawing.Point(213, 51)
+        Me.btnCancel.Location = New System.Drawing.Point(213, 54)
         Me.btnCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(131, 44)
@@ -92,13 +95,24 @@ Partial Class frmLogin
         Me.btnCancel.Text = "Button1"
         Me.btnCancel.UseVisualStyleBackColor = True
         '
+        'lblVersion
+        '
+        Me.lblVersion.AutoSize = True
+        Me.lblVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblVersion.Location = New System.Drawing.Point(12, 100)
+        Me.lblVersion.Name = "lblVersion"
+        Me.lblVersion.Size = New System.Drawing.Size(27, 9)
+        Me.lblVersion.TabIndex = 5
+        Me.lblVersion.Text = "Label1"
+        '
         'frmLogin
         '
         Me.AcceptButton = Me.btnLogin
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
-        Me.ClientSize = New System.Drawing.Size(355, 104)
+        Me.ClientSize = New System.Drawing.Size(355, 110)
+        Me.Controls.Add(Me.lblVersion)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnLogin)
         Me.Controls.Add(Me.txtBoxPassword)
@@ -125,4 +139,5 @@ Partial Class frmLogin
     Friend WithEvents txtBoxPassword As TextBox
     Friend WithEvents btnLogin As Button
     Friend WithEvents btnCancel As Button
+    Friend WithEvents lblVersion As Label
 End Class

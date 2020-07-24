@@ -23,6 +23,7 @@ Partial Class frmMembers
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMembers))
         Me.btnRefresh = New System.Windows.Forms.Button()
         Me.dtaGridMembers = New System.Windows.Forms.DataGridView()
         Me.btnChangeMember = New System.Windows.Forms.Button()
@@ -37,6 +38,9 @@ Partial Class frmMembers
         Me.cntMenueChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntMenueDelete = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntMenueRefresh = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cntMenuePrint = New System.Windows.Forms.ToolStripMenuItem()
+        Me.prtDocument = New System.Drawing.Printing.PrintDocument()
+        Me.prtDialog = New System.Windows.Forms.PrintPreviewDialog()
         CType(Me.dtaGridMembers, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.cntMouseMenue.SuspendLayout()
         Me.SuspendLayout()
@@ -140,9 +144,9 @@ Partial Class frmMembers
         '
         'cntMouseMenue
         '
-        Me.cntMouseMenue.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntMenueNew, Me.cntMenueChange, Me.cntMenueDelete, Me.cntMenueRefresh})
+        Me.cntMouseMenue.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntMenueNew, Me.cntMenueChange, Me.cntMenueDelete, Me.cntMenuePrint, Me.cntMenueRefresh})
         Me.cntMouseMenue.Name = "ContextMenuStrip1"
-        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 92)
+        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 114)
         '
         'cntMenueNew
         '
@@ -160,7 +164,6 @@ Partial Class frmMembers
         'cntMenueDelete
         '
         Me.cntMenueDelete.Name = "cntMenueDelete"
-        Me.cntMenueDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete
         Me.cntMenueDelete.Size = New System.Drawing.Size(202, 22)
         Me.cntMenueDelete.Text = "&Löschen"
         '
@@ -170,6 +173,28 @@ Partial Class frmMembers
         Me.cntMenueRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5
         Me.cntMenueRefresh.Size = New System.Drawing.Size(202, 22)
         Me.cntMenueRefresh.Text = "&Ansicht aktualisieren"
+        '
+        'cntMenuePrint
+        '
+        Me.cntMenuePrint.Name = "cntMenuePrint"
+        Me.cntMenuePrint.Size = New System.Drawing.Size(202, 22)
+        Me.cntMenuePrint.Text = "&Drucken"
+        '
+        'prtDocument
+        '
+        Me.prtDocument.DocumentName = "Mitgliederstammdatenblatt"
+        '
+        'prtDialog
+        '
+        Me.prtDialog.AutoScrollMargin = New System.Drawing.Size(0, 0)
+        Me.prtDialog.AutoScrollMinSize = New System.Drawing.Size(0, 0)
+        Me.prtDialog.ClientSize = New System.Drawing.Size(400, 300)
+        Me.prtDialog.Document = Me.prtDocument
+        Me.prtDialog.Enabled = True
+        Me.prtDialog.Icon = CType(resources.GetObject("prtDialog.Icon"), System.Drawing.Icon)
+        Me.prtDialog.Name = "prtDialog"
+        Me.prtDialog.ShowIcon = False
+        Me.prtDialog.Visible = False
         '
         'frmMembers
         '
@@ -215,4 +240,7 @@ Partial Class frmMembers
     Friend WithEvents cntMenueChange As ToolStripMenuItem
     Friend WithEvents cntMenueDelete As ToolStripMenuItem
     Friend WithEvents cntMenueRefresh As ToolStripMenuItem
+    Friend WithEvents cntMenuePrint As ToolStripMenuItem
+    Friend WithEvents prtDocument As Printing.PrintDocument
+    Friend WithEvents prtDialog As PrintPreviewDialog
 End Class

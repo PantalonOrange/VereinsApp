@@ -26,6 +26,10 @@ Public Class frmMembers
         readMembers(txtBoxSearch.Text)
     End Sub
 
+    Private Sub frmMembers_Closed(sender As Object, e As EventArgs) Handles MyBase.Closed
+        frmMain.RunningModules.Member = False
+    End Sub
+
     Private Sub frmMembers_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         'Handle key prints F3, F4, F5 and F6 manually
         Select Case e.KeyCode
@@ -88,6 +92,10 @@ Public Class frmMembers
         readMembers(txtBoxSearch.Text)
     End Sub
 
+    Private Sub cntMenuePrint_Click(sender As Object, e As EventArgs) Handles cntMenuePrint.Click
+        printMember()
+    End Sub
+
     Private Sub txtBoxSearch_TextChanged(sender As Object, e As EventArgs) Handles txtBoxSearch.TextChanged
         readMembers(txtBoxSearch.Text)
     End Sub
@@ -110,11 +118,13 @@ Public Class frmMembers
         Dim Connection As New MySqlConnection
         Connection.ConnectionString = ConnectionString
         Dim SQLQueryString As String =
-            "SELECT mem_id 'ID', mem_name 'Familienname', mem_firstname 'Vorname', mem_function 'Funktionen', mem_grade 'Rang', mem_phone 'Telefonnummer',
-                    mem_mail 'eMail-Adresse', mem_birthday 'Geburtstag', mem_start 'Eintritt', mem_end 'Austritt' 
+            "SELECT mem_id 'ID', mem_name 'Familienname', mem_firstname 'Vorname', mem_function 'Funktionen', IFNULL(grade_description, '-') 'Rang',
+                    mem_supporter 'Unterstuetzer', mem_phone 'Telefonnummer', mem_mail 'eMail-Adresse', mem_birthday 'Geburtstag', 
+                    mem_start 'Eintritt', mem_end 'Austritt' 
                FROM members
+               LEFT JOIN grades ON (grade_id = IFNULL(mem_grade, 0))
               WHERE UPPER(mem_name) LIKE ?PARM_SEARCH OR UPPER(mem_firstname) LIKE ?PARM_SEARCH
-              ORDER BY mem_name, mem_firstname"
+              ORDER BY mem_end, mem_supporter, mem_name, mem_firstname"
         Try
             Connection.Open()
             Dim SQLCommand As New MySqlCommand(SQLQueryString, Connection)
@@ -164,7 +174,8 @@ Public Class frmMembers
     Private Sub deleteMember()
         Dim Result As DialogResult
         For Each SelectedRow As DataGridViewRow In dtaGridMembers.SelectedRows
-            Result = MessageBox.Show("Bitte das Löschen des Mitgliedes bestätigen", "Mitglied wirklich löschen?", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            Result = MessageBox.Show("Bitte das Löschen des Mitgliedes bestätigen", "Mitglied wirklich löschen?",
+                                     MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If Result = System.Windows.Forms.DialogResult.Yes Then
                 deleteMemberData(Convert.ToInt32(dtaGridMembers.Rows(SelectedRow.Index).Cells(0).Value))
             End If
@@ -186,6 +197,18 @@ Public Class frmMembers
         Catch ex As MySqlException
             MessageBox.Show(ex.Message, "Datenbankfehler", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub printMember()
+        Dim Result As DialogResult
+        Static printMemberSheet As New service_PrintMemberSheet
+        For Each SelectedRow As DataGridViewRow In dtaGridMembers.SelectedRows
+            Result = MessageBox.Show("Möchten Sie das Stammdatenblatt ausdrucken?", "Mitgliederdaten drucken?",
+                                     MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If Result = System.Windows.Forms.DialogResult.Yes Then
+                printMemberSheet.printItNow(Convert.ToInt32(dtaGridMembers.Rows(SelectedRow.Index).Cells(0).Value))
+            End If
+        Next
     End Sub
 
     Private Sub timerReadMember_Tick(sender As Object, e As EventArgs) Handles timerReadMember.Tick

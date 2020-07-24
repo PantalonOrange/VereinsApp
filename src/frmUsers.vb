@@ -24,6 +24,10 @@ Public Class frmUsers
         readUsers(txtBoxSearch.Text)
     End Sub
 
+    Private Sub frmUsers_Closed(sender As Object, e As EventArgs) Handles MyBase.Closed
+        frmMain.RunningModules.User = False
+    End Sub
+
     Private Sub frmUser_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         'Handle key prints F3, F4, F5 and F6 manually
         Select Case e.KeyCode
@@ -101,7 +105,8 @@ Public Class frmUsers
             "SELECT user_id 'Kennung', user_name 'Name', user_last_login 'Letzte Anmeldung', 
                     CASE WHEN IFNULL(user_status, '0') = '1' THEN 'Aktiv' ELSE 'Inaktiv' END 'Benutzer Status',
                     user_sec_user 'Benutzer verwalten', user_sec_member 'Mitlgieder verwalten',
-                    user_sec_expedition 'Ausrueckungen verwalten', user_sec_cash 'Kassa verwalten'
+                    user_sec_expedition 'Ausrueckungen verwalten', user_sec_cash 'Kassa verwalten',
+                    user_sec_documents 'Dokumente verwalten'
                FROM users
               WHERE UPPER(user_name) LIKE ?PARM_SEARCH
               ORDER BY user_id"

@@ -22,10 +22,11 @@ Partial Class frmMain
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.stsStripMain = New System.Windows.Forms.StatusStrip()
         Me.stsStripLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.mnuStrip = New System.Windows.Forms.MenuStrip()
         Me.DateiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SignOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
@@ -37,11 +38,32 @@ Partial Class frmMain
         Me.ExpeditionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.CashFlowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InfoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SupportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.notifyIcon = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.notifyMenuStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ShowNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ChangePasswordNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SignoffNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AppsNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AppUserNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MemberNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExpeditionsNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CashFlowNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
+        Me.HelpNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.InfoNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SupportNotifyMenuStrip = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DocumentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.stsStripMain.SuspendLayout()
-        Me.MenuStrip1.SuspendLayout()
+        Me.mnuStrip.SuspendLayout()
+        Me.notifyMenuStrip.SuspendLayout()
         Me.SuspendLayout()
         '
         'stsStripMain
@@ -60,16 +82,16 @@ Partial Class frmMain
         Me.stsStripLabel.Name = "stsStripLabel"
         Me.stsStripLabel.Size = New System.Drawing.Size(0, 17)
         '
-        'MenuStrip1
+        'mnuStrip
         '
-        Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DateiToolStripMenuItem, Me.AppsToolStripMenuItem, Me.ToolStripMenuItem1})
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(4, 1, 0, 1)
-        Me.MenuStrip1.Size = New System.Drawing.Size(533, 24)
-        Me.MenuStrip1.TabIndex = 2
-        Me.MenuStrip1.Text = "MenuStrip1"
+        Me.mnuStrip.ImageScalingSize = New System.Drawing.Size(24, 24)
+        Me.mnuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DateiToolStripMenuItem, Me.AppsToolStripMenuItem, Me.HelpToolStripMenuItem})
+        Me.mnuStrip.Location = New System.Drawing.Point(0, 0)
+        Me.mnuStrip.Name = "mnuStrip"
+        Me.mnuStrip.Padding = New System.Windows.Forms.Padding(4, 1, 0, 1)
+        Me.mnuStrip.Size = New System.Drawing.Size(533, 24)
+        Me.mnuStrip.TabIndex = 2
+        Me.mnuStrip.Text = "MenuStrip1"
         '
         'DateiToolStripMenuItem
         '
@@ -98,7 +120,7 @@ Partial Class frmMain
         '
         'AppsToolStripMenuItem
         '
-        Me.AppsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AppUserToolStripMenuItem, Me.ToolStripSeparator1, Me.MemberToolStripMenuItem, Me.ExpeditionsToolStripMenuItem, Me.ToolStripSeparator2, Me.CashFlowToolStripMenuItem})
+        Me.AppsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AppUserToolStripMenuItem, Me.ToolStripSeparator1, Me.MemberToolStripMenuItem, Me.ExpeditionsToolStripMenuItem, Me.ToolStripSeparator2, Me.CashFlowToolStripMenuItem, Me.ToolStripSeparator9, Me.DocumentToolStripMenuItem})
         Me.AppsToolStripMenuItem.Name = "AppsToolStripMenuItem"
         Me.AppsToolStripMenuItem.Size = New System.Drawing.Size(46, 22)
         Me.AppsToolStripMenuItem.Text = "&Apps"
@@ -141,12 +163,12 @@ Partial Class frmMain
         Me.CashFlowToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.CashFlowToolStripMenuItem.Text = "&Kassa"
         '
-        'ToolStripMenuItem1
+        'HelpToolStripMenuItem
         '
-        Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InfoToolStripMenuItem, Me.SupportToolStripMenuItem})
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(24, 22)
-        Me.ToolStripMenuItem1.Text = "&?"
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InfoToolStripMenuItem, Me.SupportToolStripMenuItem})
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(24, 22)
+        Me.HelpToolStripMenuItem.Text = "&?"
         '
         'InfoToolStripMenuItem
         '
@@ -160,16 +182,134 @@ Partial Class frmMain
         Me.SupportToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.SupportToolStripMenuItem.Text = "&Support"
         '
+        'notifyIcon
+        '
+        Me.notifyIcon.ContextMenuStrip = Me.notifyMenuStrip
+        Me.notifyIcon.Icon = CType(resources.GetObject("notifyIcon.Icon"), System.Drawing.Icon)
+        Me.notifyIcon.Text = "NotifyIcon1"
+        Me.notifyIcon.Visible = True
+        '
+        'notifyMenuStrip
+        '
+        Me.notifyMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowNotifyMenuStrip, Me.ToolStripSeparator8, Me.ChangePasswordNotifyMenuStrip, Me.SignoffNotifyMenuStrip, Me.ToolStripSeparator4, Me.AppsNotifyMenuStrip, Me.ToolStripSeparator7, Me.HelpNotifyMenuStrip})
+        Me.notifyMenuStrip.Name = "ContextMenuStrip"
+        Me.notifyMenuStrip.Size = New System.Drawing.Size(162, 132)
+        '
+        'ShowNotifyMenuStrip
+        '
+        Me.ShowNotifyMenuStrip.Name = "ShowNotifyMenuStrip"
+        Me.ShowNotifyMenuStrip.Size = New System.Drawing.Size(161, 22)
+        Me.ShowNotifyMenuStrip.Text = "A&nzeigen"
+        '
+        'ToolStripSeparator8
+        '
+        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(158, 6)
+        '
+        'ChangePasswordNotifyMenuStrip
+        '
+        Me.ChangePasswordNotifyMenuStrip.Name = "ChangePasswordNotifyMenuStrip"
+        Me.ChangePasswordNotifyMenuStrip.Size = New System.Drawing.Size(161, 22)
+        Me.ChangePasswordNotifyMenuStrip.Text = "&Passwort ändern"
+        '
+        'SignoffNotifyMenuStrip
+        '
+        Me.SignoffNotifyMenuStrip.Name = "SignoffNotifyMenuStrip"
+        Me.SignoffNotifyMenuStrip.Size = New System.Drawing.Size(161, 22)
+        Me.SignoffNotifyMenuStrip.Text = "&Abmelden"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(158, 6)
+        '
+        'AppsNotifyMenuStrip
+        '
+        Me.AppsNotifyMenuStrip.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AppUserNotifyMenuStrip, Me.ToolStripSeparator5, Me.MemberNotifyMenuStrip, Me.ExpeditionsNotifyMenuStrip, Me.ToolStripSeparator6, Me.CashFlowNotifyMenuStrip})
+        Me.AppsNotifyMenuStrip.Name = "AppsNotifyMenuStrip"
+        Me.AppsNotifyMenuStrip.Size = New System.Drawing.Size(161, 22)
+        Me.AppsNotifyMenuStrip.Text = "Apps"
+        '
+        'AppUserNotifyMenuStrip
+        '
+        Me.AppUserNotifyMenuStrip.Name = "AppUserNotifyMenuStrip"
+        Me.AppUserNotifyMenuStrip.Size = New System.Drawing.Size(151, 22)
+        Me.AppUserNotifyMenuStrip.Text = "&App-Benutzer"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(148, 6)
+        '
+        'MemberNotifyMenuStrip
+        '
+        Me.MemberNotifyMenuStrip.Name = "MemberNotifyMenuStrip"
+        Me.MemberNotifyMenuStrip.Size = New System.Drawing.Size(151, 22)
+        Me.MemberNotifyMenuStrip.Text = "&Mitglieder"
+        '
+        'ExpeditionsNotifyMenuStrip
+        '
+        Me.ExpeditionsNotifyMenuStrip.Name = "ExpeditionsNotifyMenuStrip"
+        Me.ExpeditionsNotifyMenuStrip.Size = New System.Drawing.Size(151, 22)
+        Me.ExpeditionsNotifyMenuStrip.Text = "A&usrückungen"
+        '
+        'ToolStripSeparator6
+        '
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(148, 6)
+        '
+        'CashFlowNotifyMenuStrip
+        '
+        Me.CashFlowNotifyMenuStrip.Name = "CashFlowNotifyMenuStrip"
+        Me.CashFlowNotifyMenuStrip.Size = New System.Drawing.Size(151, 22)
+        Me.CashFlowNotifyMenuStrip.Text = "&Kassa"
+        '
+        'ToolStripSeparator7
+        '
+        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(158, 6)
+        '
+        'HelpNotifyMenuStrip
+        '
+        Me.HelpNotifyMenuStrip.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InfoNotifyMenuStrip, Me.SupportNotifyMenuStrip})
+        Me.HelpNotifyMenuStrip.Name = "HelpNotifyMenuStrip"
+        Me.HelpNotifyMenuStrip.Size = New System.Drawing.Size(161, 22)
+        Me.HelpNotifyMenuStrip.Text = "&?"
+        '
+        'InfoNotifyMenuStrip
+        '
+        Me.InfoNotifyMenuStrip.Name = "InfoNotifyMenuStrip"
+        Me.InfoNotifyMenuStrip.Size = New System.Drawing.Size(116, 22)
+        Me.InfoNotifyMenuStrip.Text = "&Info"
+        '
+        'SupportNotifyMenuStrip
+        '
+        Me.SupportNotifyMenuStrip.Name = "SupportNotifyMenuStrip"
+        Me.SupportNotifyMenuStrip.Size = New System.Drawing.Size(116, 22)
+        Me.SupportNotifyMenuStrip.Text = "&Support"
+        '
+        'ToolStripSeparator9
+        '
+        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(196, 6)
+        '
+        'DocumentToolStripMenuItem
+        '
+        Me.DocumentToolStripMenuItem.Name = "DocumentToolStripMenuItem"
+        Me.DocumentToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F8), System.Windows.Forms.Keys)
+        Me.DocumentToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.DocumentToolStripMenuItem.Text = "&Dokumente"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(533, 292)
         Me.Controls.Add(Me.stsStripMain)
-        Me.Controls.Add(Me.MenuStrip1)
+        Me.Controls.Add(Me.mnuStrip)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.IsMdiContainer = True
-        Me.MainMenuStrip = Me.MenuStrip1
+        Me.MainMenuStrip = Me.mnuStrip
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "frmMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -177,15 +317,16 @@ Partial Class frmMain
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.stsStripMain.ResumeLayout(False)
         Me.stsStripMain.PerformLayout()
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
+        Me.mnuStrip.ResumeLayout(False)
+        Me.mnuStrip.PerformLayout()
+        Me.notifyMenuStrip.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents stsStripMain As StatusStrip
-    Friend WithEvents MenuStrip1 As MenuStrip
+    Friend WithEvents mnuStrip As MenuStrip
     Friend WithEvents DateiToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SignOffToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AppsToolStripMenuItem As ToolStripMenuItem
@@ -196,9 +337,29 @@ Partial Class frmMain
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents stsStripLabel As ToolStripStatusLabel
-    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents InfoToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SupportToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents ChangePasswordToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents notifyIcon As NotifyIcon
+    Friend WithEvents notifyMenuStrip As ContextMenuStrip
+    Friend WithEvents ShowNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents SignoffNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents AppsNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents AppUserNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
+    Friend WithEvents MemberNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents ExpeditionsNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator6 As ToolStripSeparator
+    Friend WithEvents CashFlowNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents ChangePasswordNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
+    Friend WithEvents HelpNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents InfoNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents SupportNotifyMenuStrip As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator8 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator9 As ToolStripSeparator
+    Friend WithEvents DocumentToolStripMenuItem As ToolStripMenuItem
 End Class

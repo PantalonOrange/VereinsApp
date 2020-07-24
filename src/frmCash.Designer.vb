@@ -41,6 +41,7 @@ Partial Class frmCash
         Me.cntMenueChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntMenueDelete = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntMenueRefresh = New System.Windows.Forms.ToolStripMenuItem()
+        Me.lblRefresh = New System.Windows.Forms.Label()
         CType(Me.dtaGridCashFlow, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.cntMouseMenue.SuspendLayout()
         Me.SuspendLayout()
@@ -59,7 +60,7 @@ Partial Class frmCash
         'lblYear
         '
         Me.lblYear.AutoSize = True
-        Me.lblYear.Location = New System.Drawing.Point(12, 561)
+        Me.lblYear.Location = New System.Drawing.Point(13, 566)
         Me.lblYear.Name = "lblYear"
         Me.lblYear.Size = New System.Drawing.Size(39, 13)
         Me.lblYear.TabIndex = 24
@@ -139,7 +140,7 @@ Partial Class frmCash
         'lblTxtTotal
         '
         Me.lblTxtTotal.AutoSize = True
-        Me.lblTxtTotal.Location = New System.Drawing.Point(130, 561)
+        Me.lblTxtTotal.Location = New System.Drawing.Point(131, 566)
         Me.lblTxtTotal.Name = "lblTxtTotal"
         Me.lblTxtTotal.Size = New System.Drawing.Size(39, 13)
         Me.lblTxtTotal.TabIndex = 25
@@ -148,16 +149,17 @@ Partial Class frmCash
         'lblTotal
         '
         Me.lblTotal.AutoSize = True
-        Me.lblTotal.Location = New System.Drawing.Point(187, 561)
+        Me.lblTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblTotal.Location = New System.Drawing.Point(188, 566)
         Me.lblTotal.Name = "lblTotal"
-        Me.lblTotal.Size = New System.Drawing.Size(39, 13)
+        Me.lblTotal.Size = New System.Drawing.Size(41, 15)
         Me.lblTotal.TabIndex = 26
         Me.lblTotal.Text = "Label1"
         '
         'cmbBoxYear
         '
         Me.cmbBoxYear.FormattingEnabled = True
-        Me.cmbBoxYear.Location = New System.Drawing.Point(57, 558)
+        Me.cmbBoxYear.Location = New System.Drawing.Point(58, 563)
         Me.cmbBoxYear.MaxLength = 4
         Me.cmbBoxYear.Name = "cmbBoxYear"
         Me.cmbBoxYear.Size = New System.Drawing.Size(67, 21)
@@ -184,7 +186,7 @@ Partial Class frmCash
         '
         Me.cntMouseMenue.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntMenueNew, Me.cntMenueChange, Me.cntMenueDelete, Me.cntMenueRefresh})
         Me.cntMouseMenue.Name = "ContextMenuStrip1"
-        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 114)
+        Me.cntMouseMenue.Size = New System.Drawing.Size(203, 92)
         '
         'cntMenueNew
         '
@@ -212,6 +214,15 @@ Partial Class frmCash
         Me.cntMenueRefresh.Size = New System.Drawing.Size(202, 22)
         Me.cntMenueRefresh.Text = "&Ansicht aktualisieren"
         '
+        'lblRefresh
+        '
+        Me.lblRefresh.AutoSize = True
+        Me.lblRefresh.Location = New System.Drawing.Point(13, 566)
+        Me.lblRefresh.Name = "lblRefresh"
+        Me.lblRefresh.Size = New System.Drawing.Size(39, 13)
+        Me.lblRefresh.TabIndex = 30
+        Me.lblRefresh.Text = "Label1"
+        '
         'frmCash
         '
         Me.AcceptButton = Me.btnNewFlow
@@ -219,6 +230,7 @@ Partial Class frmCash
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(1055, 595)
+        Me.Controls.Add(Me.lblRefresh)
         Me.Controls.Add(Me.txtBoxSearch)
         Me.Controls.Add(Me.lblSearch)
         Me.Controls.Add(Me.cmbBoxYear)
@@ -263,4 +275,5 @@ Partial Class frmCash
     Friend WithEvents cntMenueChange As ToolStripMenuItem
     Friend WithEvents cntMenueDelete As ToolStripMenuItem
     Friend WithEvents cntMenueRefresh As ToolStripMenuItem
+    Friend WithEvents lblRefresh As Label
 End Class

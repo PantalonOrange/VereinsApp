@@ -18,6 +18,7 @@ Public Class frmManageMember
         'Load formular and fill in comboboxes and text-constants like buttons and labels
         ' If the variable NewRecordMode is ON the form will start with all empty records
         ' Is the variable NewRecordMode OFF the form loads the values from the table -> key MemberID
+        ' Important to know: the date 1900-01-01 means NULL for the table-values
         Me.KeyPreview = True
         lblMemberName.Text = "Name/Vorname"
         lblStreet.Text = "Strasse"
@@ -27,6 +28,7 @@ Public Class frmManageMember
         lblMail.Text = "Mail"
         lblFunction.Text = "Funktionen"
         lblGrade.Text = "Rang"
+        chkBoxSupporter.Text = "Unterstützer"
         lblBirthday.Text = "Geburtstag"
         lblStart.Text = "Eintritt"
         lblEnd.Text = "Austritt"
@@ -43,6 +45,7 @@ Public Class frmManageMember
             dateStart.Value = Convert.ToDateTime("1900-01-01")
             chkBoxEnd.Checked = False
             dateEnd.Enabled = chkBoxEnd.Checked
+            dateEnd.Value = Convert.ToDateTime("1900-01-01")
             lblChange.Visible = False
             lblChangeDate.Visible = False
             lbltxtid.Visible = False
@@ -86,13 +89,26 @@ Public Class frmManageMember
         Me.Close()
     End Sub
 
+    Private Sub cmbBoxGrade_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbBoxGrade.SelectedIndexChanged
+        'Change picture to new grade
+        Dim Connection As New MySqlConnection
+        Connection.ConnectionString = ConnectionString
+        Connection.Open()
+        Dim QueryString As String =
+            "SELECT grade_pic FROM grades WHERE grade_id = ?PARM_ID"
+        Dim QueryCommand As New MySqlCommand(QueryString, Connection)
+        QueryCommand.Parameters.Add("?PARM_ID", MySqlDbType.VarChar).Value = cmbBoxGrade.SelectedValue
+        Dim SQLReader As MySqlDataReader
+        SQLReader = QueryCommand.ExecuteReader
+        While (SQLReader.Read)
+            getAndShowPicture(SQLReader(0).ToString)
+            Exit While
+        End While
+        Connection.Close()
+    End Sub
+
     Private Sub chkBoxEnd_CheckedChanged(sender As Object, e As EventArgs) Handles chkBoxEnd.CheckedChanged
         dateEnd.Enabled = chkBoxEnd.Checked
-        If chkBoxEnd.Checked Then
-            dateEnd.Value = Now.Date
-        Else
-            dateEnd.Value = Convert.ToDateTime("1900-01-01")
-        End If
     End Sub
 
     Private Sub readMember(ByVal pMemberID As Integer)
@@ -101,8 +117,8 @@ Public Class frmManageMember
         Connection.Open()
         Dim QueryString As String =
             "SELECT IFNULL(mem_name, ''), IFNULL(mem_firstname, ''), IFNULL(mem_street, ''), IFNULL(mem_zip, ''), IFNULL(mem_city, ''), 
-                    IFNULL(mem_country, ''), IFNULL(mem_phone, ''), IFNULL(mem_mail, ''), IFNULL(mem_function, ''), IFNULL(mem_grade, ''), 
-                    IFNULL(mem_birthday, '1900-01-01'), IFNULL(mem_start, '1900-01-01'), IFNULL(mem_end, '1900-01-01'), 
+                    IFNULL(mem_country, ''), IFNULL(mem_phone, ''), IFNULL(mem_mail, ''), IFNULL(mem_function, ''), IFNULL(mem_grade, 0), 
+                    IFNULL(mem_supporter, 0), IFNULL(mem_birthday, '1900-01-01'), IFNULL(mem_start, '1900-01-01'), IFNULL(mem_end, '1900-01-01'), 
                     IFNULL(mem_change, '0001-01-01'), IFNULL(mem_user, '')
                FROM members
               WHERE mem_id = ?PARM_MEMBER_ID"
@@ -120,36 +136,44 @@ Public Class frmManageMember
             txtBoxPhone.Text = SQLReader(6).ToString
             txtBoxMail.Text = SQLReader(7).ToString
             txtBoxFunction.Text = SQLReader(8).ToString
-            cmbBoxGrade.Text = SQLReader(9).ToString
-            dateBirthday.Value = SQLReader(10).ToString
-            dateStart.Value = SQLReader(11).ToString
-            dateEnd.Value = SQLReader(12).ToString
-            If SQLReader(12).ToString = New Date(1900, 1, 1) Then
+            cmbBoxGrade.SelectedValue = SQLReader(9).ToString
+            chkBoxSupporter.Checked = Convert.ToInt16(SQLReader(10).ToString)
+            dateBirthday.Value = SQLReader(11).ToString
+            dateStart.Value = SQLReader(12).ToString
+            dateEnd.Value = SQLReader(13).ToString
+            If SQLReader(14).ToString = New Date(1900, 1, 1) Then
                 chkBoxEnd.Checked = False
                 dateEnd.Enabled = False
             Else
                 chkBoxEnd.Checked = True
                 dateEnd.Enabled = True
             End If
-            lblChangeDate.Text = SQLReader(13).ToString & "/" & SQLReader(14).ToString
+            lblChangeDate.Text = SQLReader(14).ToString & "/" & SQLReader(15).ToString
             Exit While
         End While
         Connection.Close()
     End Sub
 
     Private Sub fillInCmbBoxGrade()
+        Dim DtaTbl As New DataTable()
+        DtaTbl.Columns.Add("ID", Type.GetType("System.Int16"))
+        DtaTbl.Columns.Add("Description", Type.GetType("System.String"))
         cmbBoxGrade.Items.Clear()
         Dim Connection As New MySqlConnection
         Connection.ConnectionString = ConnectionString
         Connection.Open()
         Dim QueryString As String =
-            "SELECT mem_grade FROM members GROUP BY mem_grade ORDER BY mem_grade"
+            "SELECT grade_id 'ID', IFNULL(grade_description, '') 'Description'
+               FROM grades 
+              ORDER BY grade_id"
         Dim QueryCommand As New MySqlCommand(QueryString, Connection)
-        Dim SQLReader As MySqlDataReader
-        SQLReader = QueryCommand.ExecuteReader
-        While (SQLReader.Read)
-            cmbBoxGrade.Items.Add(SQLReader(0).ToString)
-        End While
+        Dim Table As New DataTable
+        Dim Adapter As New MySqlDataAdapter
+        Adapter.SelectCommand = QueryCommand
+        Adapter.Fill(Table)
+        cmbBoxGrade.DataSource = Table
+        cmbBoxGrade.DisplayMember = "Description"
+        cmbBoxGrade.ValueMember = "ID"
         Connection.Close()
     End Sub
 
@@ -170,7 +194,8 @@ Public Class frmManageMember
                     mem_phone = NULLIF(?PARM_MEMBER_PHONE, ''), 
                     mem_mail = NULLIF(?PARM_MEMBER_MAIL, ''),
                     mem_function = NULLIF(RTRIM(?PARM_MEMBER_FUNCTION), ''),
-                    mem_grade = NULLIF(RTRIM(?PARM_MEMBER_GRADE), ''),
+                    mem_grade = NULLIF(?PARM_MEMBER_GRADE, 0),
+                    mem_supporter = NULLIF(?PARM_MEMBER_SUPPORTER, 0),
                     mem_birthday = NULLIF(?PARM_MEMBER_BIRTHDAY, '1900-01-01'), 
                     mem_start = NULLIF(?PARM_MEMBER_START, '1900-01-01'), 
                     mem_end = NULLIF(?PARM_MEMBER_END, '1900-01-01'), 
@@ -185,7 +210,8 @@ Public Class frmManageMember
                                                   IFNULL(mem_phone, '') <> ?PARM_MEMBER_PHONE OR
                                                   IFNULL(mem_mail, '') <> ?PARM_MEMBER_MAIL OR 
                                                   IFNULL(mem_function, '') <> ?PARM_MEMBER_FUNCTION OR
-                                                  IFNULL(mem_grade, '') <> ?PARM_MEMBER_GRADE OR
+                                                  IFNULL(mem_grade, 0) <> ?PARM_MEMBER_GRADE OR
+                                                  IFNULL(mem_supporter, 0) <> ?PARM_MEMBER_SUPPORTER OR
                                                   IFNULL(mem_birthday, '1900-01-01') <> ?PARM_MEMBER_BIRTHDAY OR 
                                                   IFNULL(mem_start, '1900-01-01') <> ?PARM_MEMBER_START OR
                                                   IFNULL(mem_end, '1900-01-01') <> ?PARM_MEMBER_END)"
@@ -199,7 +225,8 @@ Public Class frmManageMember
         UpdateCommand.Parameters.Add("?PARM_MEMBER_PHONE", MySqlDbType.VarChar, 128).Value = txtBoxPhone.Text
         UpdateCommand.Parameters.Add("?PARM_MEMBER_MAIL", MySqlDbType.VarChar, 128).Value = txtBoxMail.Text
         UpdateCommand.Parameters.Add("?PARM_MEMBER_FUNCTION", MySqlDbType.VarChar, 128).Value = txtBoxFunction.Text
-        UpdateCommand.Parameters.Add("?PARM_MEMBER_GRADE", MySqlDbType.VarChar, 128).Value = cmbBoxGrade.Text
+        UpdateCommand.Parameters.Add("?PARM_MEMBER_GRADE", MySqlDbType.Int16).Value = cmbBoxGrade.SelectedValue
+        UpdateCommand.Parameters.Add("?PARM_MEMBER_SUPPORTER", MySqlDbType.Int16).Value = chkBoxSupporter.Checked
         UpdateCommand.Parameters.Add("?PARM_MEMBER_BIRTHDAY", MySqlDbType.Date).Value = dateBirthday.Value.ToString("yyyy-MM-dd")
         UpdateCommand.Parameters.Add("?PARM_MEMBER_START", MySqlDbType.Date).Value = dateStart.Value.ToString("yyyy-MM-dd")
         If Not chkBoxEnd.Checked Then
@@ -208,7 +235,7 @@ Public Class frmManageMember
             UpdateCommand.Parameters.Add("?PARM_MEMBER_END", MySqlDbType.Date).Value = dateEnd.Value.ToString("yyyy-MM-dd")
         End If
 
-        UpdateCommand.Parameters.Add("?PARM_MEMBER_ID", MySqlDbType.Int32).Value = pMemberID
+        UpdateCommand.Parameters.Add("?PARM_MEMBER_ID", MySqlDbType.Int16).Value = pMemberID
         UpdateCommand.Parameters.Add("?PARM_LAST_USER", MySqlDbType.VarChar).Value = frmMain.User
         Try
             UpdateConnection.Open()
@@ -228,12 +255,12 @@ Public Class frmManageMember
 
         Dim InsertString As String =
             "INSERT INTO members (mem_id, mem_name, mem_firstname, mem_street, mem_zip, mem_city, mem_country, mem_phone, mem_mail, mem_function, 
-                                  mem_grade, mem_birthday, mem_start, mem_end, mem_user)
+                                  mem_grade, mem_supporter, mem_birthday, mem_start, mem_end, mem_user)
              VALUES(?PARM_MEMBER_ID, NULLIF(?PARM_MEMBER_NAME, ''), NULLIF(?PARM_MEMBER_FIRSTNAME, ''),
                     NULLIF(?PARM_MEMBER_STREET, ''), NULLIF(?PARM_MEMBER_ZIP, ''), NULLIF(?PARM_MEMBER_CITY, ''), 
                     NULLIF(?PARM_MEMBER_COUNTRY, ''), NULLIF(?PARM_MEMBER_PHONE, ''), NULLIF(?PARM_MEMBER_MAIL, ''), NULLIF(?PARM_MEMBER_FUNCTION, ''),
-                    NULLIF(?PARM_MEMBER_GRADE, ''), NULLIF(?PARM_MEMBER_BIRTHDAY, '1900-01-01'), NULLIF(?PARM_MEMBER_START, '1900-01-01'), 
-                    NULLIF(?PARM_MEMBER_END, '1900-01-01'), ?PARM_LAST_USER)"
+                    NULLIF(?PARM_MEMBER_GRADE, 0), NULLIF(?PARM_MEMBER_SUPPORTER, 0), NULLIF(?PARM_MEMBER_BIRTHDAY, '1900-01-01'), 
+                    NULLIF(?PARM_MEMBER_START, '1900-01-01'), NULLIF(?PARM_MEMBER_END, '1900-01-01'), ?PARM_LAST_USER)"
         Dim InsertCommand As New MySqlCommand(InsertString, InsertConnection)
         InsertCommand.Parameters.Add("?PARM_MEMBER_ID", MySqlDbType.Int32).Value = NewMemberID
         InsertCommand.Parameters.Add("?PARM_MEMBER_NAME", MySqlDbType.VarChar).Value = txtBoxMemberName.Text
@@ -245,7 +272,8 @@ Public Class frmManageMember
         InsertCommand.Parameters.Add("?PARM_MEMBER_PHONE", MySqlDbType.VarChar).Value = txtBoxPhone.Text
         InsertCommand.Parameters.Add("?PARM_MEMBER_MAIL", MySqlDbType.VarChar).Value = txtBoxMail.Text
         InsertCommand.Parameters.Add("?PARM_MEMBER_FUNCTION", MySqlDbType.VarChar).Value = txtBoxFunction.Text
-        InsertCommand.Parameters.Add("?PARM_MEMBER_GRADE", MySqlDbType.VarChar, 128).Value = cmbBoxGrade.Text
+        InsertCommand.Parameters.Add("?PARM_MEMBER_GRADE", MySqlDbType.Int16).Value = cmbBoxGrade.SelectedValue
+        InsertCommand.Parameters.Add("?PARM_MEMBER_SUPPORTER", MySqlDbType.Int16).Value = chkBoxSupporter.Checked
         InsertCommand.Parameters.Add("?PARM_MEMBER_BIRTHDAY", MySqlDbType.Date).Value = dateBirthday.Value.ToString("yyyy-MM-dd")
         InsertCommand.Parameters.Add("?PARM_MEMBER_START", MySqlDbType.Date).Value = dateStart.Value.ToString("yyyy-MM-dd")
         If Not chkBoxEnd.Checked Then
@@ -264,9 +292,16 @@ Public Class frmManageMember
         End Try
     End Sub
 
+    Private Sub getAndShowPicture(ByVal pGradePicture As String)
+        If pGradePicture <> "" Then
+            picBoxGrade.Image = Image.FromFile(Application.StartupPath & "\pic\" & pGradePicture)
+        Else
+            picBoxGrade.Image = Nothing
+        End If
+    End Sub
+
     Private Sub getNewMemberID()
         Static getNewMemberID As New service_GetNewMemberID
         NewMemberID = getNewMemberID._getNewMemberID()
     End Sub
-
 End Class

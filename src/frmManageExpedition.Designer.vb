@@ -47,6 +47,7 @@ Partial Class frmManageExpedition
         Me.grpBoxExpeditionMembers = New System.Windows.Forms.GroupBox()
         Me.cntMouseMenue = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cntMenuRemove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.chkBoxArtillery = New System.Windows.Forms.CheckBox()
         CType(Me.dtaGridExpeditionMembers, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpBoxExpeditionMembers.SuspendLayout()
         Me.cntMouseMenue.SuspendLayout()
@@ -290,6 +291,16 @@ Partial Class frmManageExpedition
         Me.cntMenuRemove.Size = New System.Drawing.Size(125, 22)
         Me.cntMenuRemove.Text = "&Entfernen"
         '
+        'chkBoxArtillery
+        '
+        Me.chkBoxArtillery.AutoSize = True
+        Me.chkBoxArtillery.Location = New System.Drawing.Point(519, 77)
+        Me.chkBoxArtillery.Name = "chkBoxArtillery"
+        Me.chkBoxArtillery.Size = New System.Drawing.Size(81, 17)
+        Me.chkBoxArtillery.TabIndex = 65
+        Me.chkBoxArtillery.Text = "CheckBox1"
+        Me.chkBoxArtillery.UseVisualStyleBackColor = True
+        '
         'frmManageExpedition
         '
         Me.AcceptButton = Me.btnSave
@@ -297,6 +308,7 @@ Partial Class frmManageExpedition
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
         Me.ClientSize = New System.Drawing.Size(798, 625)
+        Me.Controls.Add(Me.chkBoxArtillery)
         Me.Controls.Add(Me.cmbBoxExpeditionCity)
         Me.Controls.Add(Me.cmbBoxExpeditionOrganisation)
         Me.Controls.Add(Me.cmbBoxExpeditionName)
@@ -356,4 +368,5 @@ Partial Class frmManageExpedition
     Friend WithEvents grpBoxExpeditionMembers As GroupBox
     Friend WithEvents cntMouseMenue As ContextMenuStrip
     Friend WithEvents cntMenuRemove As ToolStripMenuItem
+    Friend WithEvents chkBoxArtillery As CheckBox
 End Class

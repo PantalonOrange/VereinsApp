@@ -10,12 +10,13 @@ Public Class service_GetDataBaseInfos
     'Create and return the connectionstring for db-connection
 
     Public Function _returnConnectionString()
+        Dim DatabaseSettings As StructDataBaseConnect = frmLogin.AppSettings
         Static MySQLCS As New MySqlConnectionStringBuilder
-        MySQLCS.Server = "?"
-        MySQLCS.Port = 0
-        MySQLCS.Database = ?
-        MySQLCS.UserID = ?
-        MySQLCS.Password = ?
+        MySQLCS.Server = DatabaseSettings.Server
+        MySQLCS.Port = Convert.ToUInt32(DatabaseSettings.Port)
+        MySQLCS.Database = DatabaseSettings.Database
+        MySQLCS.UserID = DatabaseSettings.UserID
+        MySQLCS.Password = DatabaseSettings.Password
         MySQLCS.UseCompression = True
         Return MySQLCS.ConnectionString
     End Function
@@ -26,23 +27,31 @@ Public Class service_CheckLogin
     'Set the last login date to current user, if fail the user or/and the password was wrong
 
     Private Success As Boolean = False
+    Private HostName As String = Net.Dns.GetHostName()
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
+    Private IPAddress As String = Net.Dns.GetHostByName(HostName).AddressList(0).ToString()
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
 
-    Public Sub _checkLogin(UserName As String, Password As String)
+    Public Sub _checkLogin(pUserName As String, pPassword As String)
         'Incoming values: Username, Password (md5 hash)
         Dim Connection As New MySqlConnection
         Dim returnConnection As New service_GetDataBaseInfos
-        Dim ConnectionString As String = returnConnection._returnConnectionString()
-        Connection.ConnectionString = ConnectionString
+        Connection.ConnectionString = returnConnection._returnConnectionString()
         Dim hashPassword As New service_hashString
-        Dim HashedPassword As String = hashPassword.returnHashedValue(Password)
+        Dim HashedPassword As String = hashPassword.returnHashedValue(pPassword)
 
         Dim SQLQueryString As String =
-            "UPDATE users SET user_last_login = CURRENT_TIMESTAMP
+            "UPDATE users
+                SET user_last_login = CURRENT_TIMESTAMP,
+                    user_last_ip = NULLIF(?PARM_LAST_IP, ''),
+                    user_last_host = NULLIF(?PARM_LAST_HOST, '')
               WHERE user_id = ?PARM_USER_ID AND user_password = ?PARM_USER_PASSWORD AND IFNULL(user_status, '0') = '1'"
         Try
             Connection.Open()
             Dim SQLCommand As New MySqlCommand(SQLQueryString, Connection)
-            SQLCommand.Parameters.Add("?PARM_USER_ID", MySqlDbType.VarChar).Value = UserName
+            SQLCommand.Parameters.Add("?PARM_LAST_IP", MySqlDbType.VarChar).Value = IPAddress
+            SQLCommand.Parameters.Add("?PARM_LAST_HOST", MySqlDbType.VarChar).Value = HostName
+            SQLCommand.Parameters.Add("?PARM_USER_ID", MySqlDbType.VarChar).Value = pUserName
             SQLCommand.Parameters.Add("?PARM_USER_PASSWORD", MySqlDbType.VarChar).Value = HashedPassword
             Success = (SQLCommand.ExecuteNonQuery > 0)
             Connection.Close()
@@ -211,6 +220,33 @@ Public Class service_GetNewCashFlowID
 
 End Class
 
+Public Class service_GetNewDocumentID
+    'Get the next document id and return this value
+
+    Private NewDocumentID As Long
+
+    Public Function _getNewDocumentID()
+        Dim IDConnection As New MySqlConnection
+        Dim returnConnection As New service_GetDataBaseInfos
+        Dim ConnectionString As String = returnConnection._returnConnectionString()
+        IDConnection.ConnectionString = ConnectionString
+        IDConnection.Open()
+        Dim QueryString As String =
+            "SELECT IFNULL(NULLIF(MAX(doc_id), 0), 0) + 1 FROM documents"
+        Dim QueryCommand As New MySqlCommand(QueryString, IDConnection)
+        Dim SQLReader As MySqlDataReader
+        SQLReader = QueryCommand.ExecuteReader
+        While (SQLReader.Read)
+            NewDocumentID = Convert.ToInt64(SQLReader(0).ToString)
+            Exit While
+        End While
+        IDConnection.Close()
+
+        Return NewDocumentID
+    End Function
+
+End Class
+
 Public Class service_CheckSecurity
     'This function checks the security permission for the user and return the result as boolean success
 
@@ -219,6 +255,7 @@ Public Class service_CheckSecurity
     Private SecMember As Boolean
     Private SecExpedition As Boolean
     Private SecCash As Boolean
+    Private SecDocuments As Boolean
 
     Public Sub _checkSecurity(ByVal pUser As String, ByVal pFunction As String)
         'Incoming values: Username, Function to check
@@ -228,7 +265,8 @@ Public Class service_CheckSecurity
         Connection.ConnectionString = ConnectionString
         Connection.Open()
         Dim QueryString As String =
-            "SELECT IFNULL(user_sec_user, 0), IFNULL(user_sec_member, 0), IFNULL(user_sec_expedition, 0), IFNULL(user_sec_cash, 0)
+            "SELECT IFNULL(user_sec_user, 0), IFNULL(user_sec_member, 0), IFNULL(user_sec_expedition, 0), 
+                    IFNULL(user_sec_cash, 0), IFNULL(user_sec_documents, 0)
                FROM users WHERE user_id = ?PARM_USER_ID"
         Dim QueryCommand As New MySqlCommand(QueryString, Connection)
         QueryCommand.Parameters.Add("?PARM_USER_ID", MySqlDbType.VarChar).Value = pUser
@@ -240,6 +278,7 @@ Public Class service_CheckSecurity
             SecMember = Convert.ToInt16(SQLReader(1).ToString)
             SecExpedition = Convert.ToInt16(SQLReader(2).ToString)
             SecCash = Convert.ToInt16(SQLReader(3).ToString)
+            SecDocuments = Convert.ToInt16(SQLReader(4).ToString)
             Exit While
         End While
         Connection.Close()
@@ -252,6 +291,8 @@ Public Class service_CheckSecurity
             Success = True
         ElseIf pFunction = "CASH" And SecCash Then
             Success = True
+        ElseIf pFunction = "DOCUMENTS" And SecDocuments Then
+            Success = True
         Else
             Success = False
         End If
@@ -259,7 +300,7 @@ Public Class service_CheckSecurity
     End Sub
 
     Public Function _returnSecurityCheck()
-        'Outgiong value: Boolean success
+        'Outgoing value: Boolean success
         Return Success
     End Function
 

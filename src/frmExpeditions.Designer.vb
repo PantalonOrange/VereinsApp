@@ -39,6 +39,7 @@ Partial Class frmExpeditions
         Me.cntMenueChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntMenueDelete = New System.Windows.Forms.ToolStripMenuItem()
         Me.cntMenueRefresh = New System.Windows.Forms.ToolStripMenuItem()
+        Me.lblRefresh = New System.Windows.Forms.Label()
         CType(Me.dtaGridExpeditions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.cntMouseMenue.SuspendLayout()
         Me.SuspendLayout()
@@ -117,7 +118,7 @@ Partial Class frmExpeditions
         'lblYear
         '
         Me.lblYear.AutoSize = True
-        Me.lblYear.Location = New System.Drawing.Point(12, 561)
+        Me.lblYear.Location = New System.Drawing.Point(12, 566)
         Me.lblYear.Name = "lblYear"
         Me.lblYear.Size = New System.Drawing.Size(39, 13)
         Me.lblYear.TabIndex = 16
@@ -137,7 +138,7 @@ Partial Class frmExpeditions
         'cmbBoxYear
         '
         Me.cmbBoxYear.FormattingEnabled = True
-        Me.cmbBoxYear.Location = New System.Drawing.Point(57, 558)
+        Me.cmbBoxYear.Location = New System.Drawing.Point(57, 563)
         Me.cmbBoxYear.MaxLength = 4
         Me.cmbBoxYear.Name = "cmbBoxYear"
         Me.cmbBoxYear.Size = New System.Drawing.Size(67, 21)
@@ -192,6 +193,15 @@ Partial Class frmExpeditions
         Me.cntMenueRefresh.Size = New System.Drawing.Size(202, 22)
         Me.cntMenueRefresh.Text = "&Ansicht aktualisieren"
         '
+        'lblRefresh
+        '
+        Me.lblRefresh.AutoSize = True
+        Me.lblRefresh.Location = New System.Drawing.Point(12, 566)
+        Me.lblRefresh.Name = "lblRefresh"
+        Me.lblRefresh.Size = New System.Drawing.Size(39, 13)
+        Me.lblRefresh.TabIndex = 19
+        Me.lblRefresh.Text = "Label1"
+        '
         'frmExpeditions
         '
         Me.AcceptButton = Me.btnNewExpedition
@@ -199,6 +209,7 @@ Partial Class frmExpeditions
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(1057, 598)
+        Me.Controls.Add(Me.lblRefresh)
         Me.Controls.Add(Me.txtBoxSearch)
         Me.Controls.Add(Me.lblSearch)
         Me.Controls.Add(Me.cmbBoxYear)
@@ -239,4 +250,5 @@ Partial Class frmExpeditions
     Friend WithEvents cntMenueChange As ToolStripMenuItem
     Friend WithEvents cntMenueDelete As ToolStripMenuItem
     Friend WithEvents cntMenueRefresh As ToolStripMenuItem
+    Friend WithEvents lblRefresh As Label
 End Class
